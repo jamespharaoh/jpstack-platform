@@ -1,14 +1,12 @@
 package wbs.platform.object.summary;
 
+import static wbs.utils.collection.CollectionUtils.emptyList;
+import static wbs.utils.collection.CollectionUtils.singletonList;
 import static wbs.utils.etc.Misc.todo;
 import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringFormat;
-
-import java.util.Collections;
-
-import javax.inject.Provider;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,6 +39,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -78,26 +77,26 @@ class ObjectSummaryPageBuilder <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ConsoleFile> consoleFileProvider;
+	ComponentProvider <ConsoleFile> consoleFileProvider;
 
 	@PrototypeDependency
-	Provider <ConsoleContextTab> contextTabProvider;
+	ComponentProvider <ConsoleContextTab> contextTabProvider;
 
 	@PrototypeDependency
-	Provider <ObjectSummaryPart> objectSummaryPartProvider;
+	ComponentProvider <ObjectSummaryPart> objectSummaryPartProvider;
 
 	@PrototypeDependency
-	Provider <ParentFormFieldSpec> parentFieldProvider;
+	ComponentProvider <ParentFormFieldSpec> parentFieldProvider;
 
 	@PrototypeDependency
-	Provider <ObjectSummaryFieldsPart <ObjectType, ParentType>>
-	summaryFieldsPartProvider;
+	ComponentProvider <ObjectSummaryFieldsPart <ObjectType, ParentType>>
+		summaryFieldsPartProvider;
 
 	@PrototypeDependency
-	Provider <TabContextResponder> tabContextResponder;
+	ComponentProvider <TabContextResponder> tabContextResponderPrvider;
 
 	@PrototypeDependency
-	Provider <TextPart> textPart;
+	ComponentProvider <TextPart> textPartProvider;
 
 	// builder
 
@@ -151,6 +150,7 @@ class ObjectSummaryPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -193,8 +193,10 @@ class ObjectSummaryPageBuilder <
 			consoleModule.addContextTab (
 				taskLogger,
 				"end",
-
-				contextTabProvider.get ()
+				contextTabProvider.provide (
+					taskLogger,
+					contextTab ->
+						contextTab
 
 					.name (
 						stringFormat (
@@ -210,8 +212,9 @@ class ObjectSummaryPageBuilder <
 							container.pathPrefix ()))
 
 					.privKeys (
-						privKey),
+						privKey)
 
+				),
 				extensionPoint.contextTypeNames ());
 
 		}
@@ -232,12 +235,13 @@ class ObjectSummaryPageBuilder <
 		) {
 
 			consoleModule.addContextFile (
-
 				stringFormat (
 					"%s.summary",
 					container.pathPrefix ()),
-
-				consoleFileProvider.get ()
+				consoleFileProvider.provide (
+					taskLogger,
+					consoleFile ->
+						consoleFile
 
 					.getResponderName (
 						taskLogger,
@@ -248,9 +252,11 @@ class ObjectSummaryPageBuilder <
 					.privKeys (
 						taskLogger,
 						privKey != null
-							? Collections.singletonList (privKey)
-							: Collections.<String>emptyList ()),
+							? singletonList (
+								privKey)
+							: emptyList ())
 
+				),
 				extensionPoint.contextTypeNames ());
 
 		}

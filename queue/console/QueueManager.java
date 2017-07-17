@@ -5,11 +5,8 @@ import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringEqualSafe;
 import static wbs.utils.string.StringUtils.stringFormat;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.inject.Provider;
 
 import lombok.NonNull;
 
@@ -23,6 +20,7 @@ import wbs.framework.component.annotations.NormalLifecycleSetup;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.annotations.StrongPrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -56,8 +54,8 @@ class QueueManager {
 	// prototype dependencies
 
 	@StrongPrototypeDependency
-	Map <String, Provider <QueueConsolePlugin>> queueHelpersByBeanName =
-		Collections.emptyMap ();
+	Map <String, ComponentProvider <QueueConsolePlugin>>
+		queueHelpersByBeanName;
 
 	// state
 
@@ -83,7 +81,7 @@ class QueueManager {
 			// initialise queuePageFactories by querying each factory
 
 			for (
-				Map.Entry <String, Provider <QueueConsolePlugin>> entry
+				Map.Entry <String, ComponentProvider <QueueConsolePlugin>> entry
 					: queueHelpersByBeanName.entrySet ()
 			) {
 
@@ -91,9 +89,13 @@ class QueueManager {
 					entry.getKey ();
 
 				QueueConsolePlugin queueHelper =
-					entry.getValue ().get ();
+					entry.getValue ().provide (
+						taskLogger);
 
-				for (String queueTypeCode : queueHelper.queueTypeCodes ()) {
+				for (
+					String queueTypeCode
+						: queueHelper.queueTypeCodes ()
+				) {
 
 					if (queueHelpers.containsKey (queueTypeCode)) {
 

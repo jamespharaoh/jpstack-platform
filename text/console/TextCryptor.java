@@ -43,6 +43,7 @@ class TextCryptor
 		) {
 
 			return cryptorFactory.makeCryptor (
+				taskLogger,
 				"text");
 
 		}

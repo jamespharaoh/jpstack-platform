@@ -1,11 +1,8 @@
 package wbs.platform.event.console;
 
+import static wbs.utils.collection.CollectionUtils.singletonList;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.string.StringUtils.stringFormat;
-
-import java.util.Collections;
-
-import javax.inject.Provider;
 
 import lombok.NonNull;
 
@@ -30,6 +27,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -58,13 +56,13 @@ class ObjectEventsPageBuilder <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ConsoleFile> consoleFile;
+	ComponentProvider <ConsoleFile> consoleFileProvider;
 
 	@PrototypeDependency
-	Provider <ConsoleContextTab> contextTab;
+	ComponentProvider <ConsoleContextTab> contextTabProvider;
 
 	@PrototypeDependency
-	Provider <TabContextResponder> tabContextResponder;
+	ComponentProvider <TabContextResponder> tabContextResponderProvider;
 
 	// builder
 
@@ -117,6 +115,7 @@ class ObjectEventsPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -150,11 +149,25 @@ class ObjectEventsPageBuilder <
 			consoleModule.addContextTab (
 				taskLogger,
 				"end",
-				contextTab.get ()
-					.name (tabName)
-					.defaultLabel ("Events")
-					.localFile (fileName)
-					.privKeys (Collections.singletonList (privKey)),
+				contextTabProvider.provide (
+					taskLogger,
+					contextTab ->
+						contextTab
+
+					.name (
+						tabName)
+
+					.defaultLabel (
+						"Events")
+
+					.localFile (
+						fileName)
+
+					.privKeys (
+						singletonList (
+							privKey))
+
+				),
 				extensionPoint.contextTypeNames ());
 
 		}
@@ -176,7 +189,10 @@ class ObjectEventsPageBuilder <
 
 			consoleModule.addContextFile (
 				fileName,
-				consoleFile.get ()
+				consoleFileProvider.provide (
+					taskLogger,
+					consoleFile ->
+						consoleFile
 
 					.getResponderName (
 						taskLogger,
@@ -184,10 +200,10 @@ class ObjectEventsPageBuilder <
 
 					.privName (
 						taskLogger,
-						privKey),
+						privKey)
 
-				extensionPoint.contextTypeNames ()
-			);
+				),
+				extensionPoint.contextTypeNames ());
 
 		}
 

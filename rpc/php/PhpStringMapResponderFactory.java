@@ -2,12 +2,17 @@ package wbs.platform.rpc.php;
 
 import java.util.Map;
 
-import javax.inject.Provider;
+import lombok.NonNull;
 
 import wbs.api.mvc.StringMapResponderFactory;
 
+import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
+import wbs.framework.component.manager.ComponentProvider;
+import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
+import wbs.framework.logging.TaskLogger;
 
 import wbs.web.responder.WebResponder;
 
@@ -16,22 +21,44 @@ public
 class PhpStringMapResponderFactory
 	implements StringMapResponderFactory {
 
+	// singleton components
+
+	@ClassSingletonDependency
+	LogContext logContext;
+
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <PhpMapResponder> phpMapResponder;
+	ComponentProvider <PhpMapResponder> phpMapResponderProvider;
 
 	// implementation
 
 	@Override
 	public
 	WebResponder makeResponder (
-			Map<String,?> map) {
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull Map <String, ?> map) {
 
-		return phpMapResponder.get ()
+		try (
 
-			.map (
-				map);
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"makeResponder");
+
+		) {
+
+			return phpMapResponderProvider.provide (
+				taskLogger,
+				phpMapResponder ->
+					phpMapResponder
+
+				.map (
+					map)
+
+			);
+
+		}
 
 	}
 

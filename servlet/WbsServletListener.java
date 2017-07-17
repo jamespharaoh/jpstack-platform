@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -42,6 +41,7 @@ import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.BootstrapComponentManager;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.tools.ComponentManagerBuilder;
 import wbs.framework.component.tools.ThreadLocalProxyComponentFactory;
 import wbs.framework.logging.Log4jLogTargetFactory;
@@ -74,7 +74,7 @@ class WbsServletListener
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ComponentManagerBuilder> componentManagerBuilderProvider;
+	ComponentProvider <ComponentManagerBuilder> componentManagerBuilderProvider;
 
 	// state
 
@@ -329,7 +329,8 @@ class WbsServletListener
 						"layerNames"));
 
 			componentManager =
-				componentManagerBuilderProvider.get ()
+				componentManagerBuilderProvider.provide (
+					taskLogger)
 
 				.primaryProjectName (
 					primaryProjectName)

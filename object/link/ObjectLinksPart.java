@@ -18,8 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Provider;
-
 import com.google.common.collect.ImmutableSet;
 
 import lombok.Getter;
@@ -41,6 +39,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -77,7 +76,7 @@ class ObjectLinksPart <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <HtmlTableCheckWriter> htmlTableCheckWriterProvider;
+	ComponentProvider <HtmlTableCheckWriter> htmlTableCheckWriterProvider;
 
 	// properties
 
@@ -237,7 +236,8 @@ class ObjectLinksPart <
 					targetObject,
 					true);
 
-				htmlTableCheckWriterProvider.get ()
+				htmlTableCheckWriterProvider.provide (
+					transaction)
 
 					.name (
 						"link_" + targetObject.getId ())

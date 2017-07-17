@@ -11,6 +11,8 @@ import static wbs.utils.string.StringUtils.substringFrom;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
+import com.google.common.base.Optional;
+
 import lombok.NonNull;
 
 import org.apache.commons.io.IOUtils;
@@ -186,7 +188,7 @@ class DeploymentLogicImplementation
 
 	@Override
 	public
-	ApiDeploymentRec thisApiDeployment (
+	Optional <ApiDeploymentRec> thisApiDeployment (
 			@NonNull Transaction parentTransaction) {
 
 		try (
@@ -198,7 +200,7 @@ class DeploymentLogicImplementation
 
 		) {
 
-			return apiDeploymentHelper.findByCodeRequired (
+			return apiDeploymentHelper.findByCode (
 				transaction,
 				GlobalId.root,
 				hyphenToUnderscore (
@@ -211,7 +213,7 @@ class DeploymentLogicImplementation
 
 	@Override
 	public
-	ConsoleDeploymentRec thisConsoleDeployment (
+	Optional <ConsoleDeploymentRec> thisConsoleDeployment (
 			@NonNull Transaction parentTransaction) {
 
 		try (
@@ -223,7 +225,7 @@ class DeploymentLogicImplementation
 
 		) {
 
-			return consoleDeploymentHelper.findByCodeRequired (
+			return consoleDeploymentHelper.findByCode (
 				transaction,
 				GlobalId.root,
 				hyphenToUnderscore (
@@ -236,7 +238,7 @@ class DeploymentLogicImplementation
 
 	@Override
 	public
-	DaemonDeploymentRec thisDaemonDeployment (
+	Optional <DaemonDeploymentRec> thisDaemonDeployment (
 			@NonNull Transaction parentTransaction) {
 
 		try (
@@ -248,7 +250,7 @@ class DeploymentLogicImplementation
 
 		) {
 
-			return daemonDeploymentHelper.findByCodeRequired (
+			return daemonDeploymentHelper.findByCode (
 				transaction,
 				GlobalId.root,
 				hyphenToUnderscore (

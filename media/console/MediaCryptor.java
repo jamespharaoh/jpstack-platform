@@ -43,6 +43,7 @@ class MediaCryptor
 		) {
 
 			return cryptorFactory.makeCryptor (
+				taskLogger,
 				"media");
 
 		}

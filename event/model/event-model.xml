@@ -144,6 +144,18 @@
 			text="%0 changed name for %1 of type %2 in %3 from %4 to %5"
 			admin="yes"/>
 
+		<!-- system admin -->
+
+		<event-type
+			name="Admin object created by fixture"
+			text="Fixture provider %0 created %1 in %2"
+			admin="yes"/>
+
+		<event-type
+			name="Admin object field updated by fixture"
+			text="Fixture provider %0 set %1 for %2 to %3"
+			admin="yes"/>
+
 	</event-types>
 
 </model-meta>

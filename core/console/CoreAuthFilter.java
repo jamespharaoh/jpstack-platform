@@ -2,7 +2,6 @@ package wbs.platform.core.console;
 
 import static wbs.utils.string.StringUtils.stringInSafe;
 
-import javax.inject.Provider;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
@@ -18,6 +17,7 @@ import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.annotations.WeakSingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.logging.LogContext;
@@ -62,7 +62,7 @@ class CoreAuthFilter
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <CoreLogonResponder> logonResponderProvider;
+	ComponentProvider <CoreLogonResponder> logonResponderProvider;
 
 	// implementation
 
@@ -129,7 +129,8 @@ class CoreAuthFilter
 					} else {
 
 						WebResponder logonResponder =
-							logonResponderProvider.get ();
+							logonResponderProvider.provide (
+								taskLogger);
 
 						logonResponder.execute (
 							taskLogger);

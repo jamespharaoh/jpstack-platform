@@ -4,8 +4,6 @@ import static wbs.utils.thread.ConcurrentUtils.futureValue;
 
 import java.util.concurrent.Future;
 
-import javax.inject.Provider;
-
 import com.google.gson.JsonObject;
 
 import lombok.NonNull;
@@ -18,6 +16,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
@@ -47,7 +46,7 @@ class ExceptionStatusLine
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ExceptionStatusLinePart> exceptionStatusLinePart;
+	ComponentProvider <ExceptionStatusLinePart> exceptionStatusLinePart;
 
 	// details
 
@@ -64,7 +63,19 @@ class ExceptionStatusLine
 	PagePart createPagePart (
 			@NonNull Transaction parentTransaction) {
 
-		return exceptionStatusLinePart.get ();
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"createPagePart");
+
+		) {
+
+			return exceptionStatusLinePart.provide (
+				transaction);
+
+		}
 
 	}
 

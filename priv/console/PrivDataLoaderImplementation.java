@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import com.google.common.base.Optional;
@@ -100,7 +99,7 @@ class PrivDataLoaderImplementation
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <UserPrivData> userPrivDataProvider;
+	ComponentProvider <UserPrivData> userPrivDataProvider;
 
 	// properties
 
@@ -181,7 +180,8 @@ class PrivDataLoaderImplementation
 		) {
 
 			UserPrivData userPrivData =
-				userPrivDataProvider.get ();
+				userPrivDataProvider.provide (
+					taskLogger);
 
 			userPrivData.sharedData =
 				getPrivData (

@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
@@ -36,6 +34,7 @@ import wbs.framework.component.annotations.NormalLifecycleSetup;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
@@ -107,7 +106,7 @@ class QueueConsoleLogicImplementation
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <QueueSubjectSorter> queueSubjectSorterProvider;
+	ComponentProvider <QueueSubjectSorter> queueSubjectSorterProvider;
 
 	// state
 
@@ -249,7 +248,8 @@ class QueueConsoleLogicImplementation
 			// find the next waiting item
 
 			SortedQueueSubjects subjects =
-				queueSubjectSorterProvider.get ()
+				queueSubjectSorterProvider.provide (
+					transaction)
 
 				.queueCache (
 					dummyQueueCache)
@@ -265,10 +265,13 @@ class QueueConsoleLogicImplementation
 					user)
 
 				.sort (
-					transaction);
+					transaction)
 
-			if (subjects.availableSubjects ().isEmpty ())
+			;
+
+			if (subjects.availableSubjects ().isEmpty ()) {
 				return null;
+			}
 
 			QueueSubjectRec queueSubject =
 				subjects.availableSubjects ().get (0).subject ();

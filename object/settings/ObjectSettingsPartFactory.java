@@ -1,7 +1,5 @@
 package wbs.platform.object.settings;
 
-import javax.inject.Provider;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -15,6 +13,7 @@ import wbs.console.part.PagePartFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -35,7 +34,8 @@ class ObjectSettingsPartFactory <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectSettingsPart <ObjectType, ?>> objectSettingsPartProvider;
+	ComponentProvider <ObjectSettingsPart <ObjectType, ?>>
+		objectSettingsPartProvider;
 
 	// properties
 
@@ -73,7 +73,10 @@ class ObjectSettingsPartFactory <
 
 		) {
 
-			return objectSettingsPartProvider.get ()
+			return objectSettingsPartProvider.provide (
+				transaction,
+				objectSettingsPart ->
+					objectSettingsPart
 
 				.objectLookup (
 					objectLookup)
@@ -93,7 +96,7 @@ class ObjectSettingsPartFactory <
 				.removeLocalName (
 					removeLocalName)
 
-			;
+			);
 
 		}
 

@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -30,6 +28,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -72,12 +71,12 @@ class PhpRpcAction
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <PhpMapResponder> phpMapResponderProvider;
+	ComponentProvider <PhpMapResponder> phpMapResponderProvider;
 
 	// properties
 
 	@Getter @Setter
-	Provider <? extends RpcHandler> rpcHandlerProvider;
+	ComponentProvider <? extends RpcHandler> rpcHandlerProvider;
 
 	// property setters
 
@@ -123,6 +122,7 @@ class PhpRpcAction
 
 			return optionalOf (
 				makeRpcResponder (
+					taskLogger,
 					Rpc.rpcError (
 						"FIXME",
 						Rpc.stInternalError,
@@ -161,7 +161,10 @@ class PhpRpcAction
 
 			}
 
-			return phpMapResponderProvider.get ()
+			return phpMapResponderProvider.provide (
+				taskLogger,
+				phpMapResponder ->
+					phpMapResponder
 
 				.map (
 					rpcResult.getStruct ().getNative ())
@@ -169,7 +172,7 @@ class PhpRpcAction
 				.status (
 					rpcResult.getHttpStatus ())
 
-			;
+			);
 
 		}
 
@@ -262,7 +265,8 @@ class PhpRpcAction
 			try {
 
 				RpcHandler rpcHandler =
-					rpcHandlerProvider.get ();
+					rpcHandlerProvider.provide (
+						taskLogger);
 
 				return rpcHandler.handle (
 					taskLogger,
@@ -287,17 +291,32 @@ class PhpRpcAction
 
 	private
 	WebResponder makeRpcResponder (
-			RpcResult result) {
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull RpcResult result) {
 
-		return phpMapResponderProvider.get ()
+		try (
 
-			.map (
-				result.getStruct ().getNative ())
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"makeRpcResponder");
 
-			.status (
-				result.getHttpStatus ())
+		) {
 
-		;
+			return phpMapResponderProvider.provide (
+				taskLogger,
+				phpMapResponder ->
+					phpMapResponder
+
+				.map (
+					result.getStruct ().getNative ())
+
+				.status (
+					result.getHttpStatus ())
+
+			);
+
+		}
 
 	}
 

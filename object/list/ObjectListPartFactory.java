@@ -6,8 +6,6 @@ import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import com.google.common.collect.ImmutableMap;
 
 import lombok.Getter;
@@ -22,10 +20,13 @@ import wbs.console.part.PagePartFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
+import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.object.criteria.WhereDeletedCriteriaSpec;
 import wbs.platform.object.criteria.WhereICanManageCriteriaSpec;
@@ -44,19 +45,22 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectListTabSpec> objectListTabSpecProvider;
+	ComponentProvider <ObjectListTabSpec> objectListTabSpecProvider;
 
 	@PrototypeDependency
-	Provider <ObjectListPart <RecordType, ?>> objectListPartProvider;
+	ComponentProvider <ObjectListPart <RecordType, ?>> objectListPartProvider;
 
 	@PrototypeDependency
-	Provider <WhereDeletedCriteriaSpec> whereDeletedCriteriaSpecProvider;
+	ComponentProvider <WhereDeletedCriteriaSpec>
+		whereDeletedCriteriaSpecProvider;
 
 	@PrototypeDependency
-	Provider <WhereICanManageCriteriaSpec> whereICanManageCriteriaSpecProvider;
+	ComponentProvider <WhereICanManageCriteriaSpec>
+		whereICanManageCriteriaSpecProvider;
 
 	@PrototypeDependency
-	Provider <WhereNotDeletedCriteriaSpec> whereNotDeletedCriteriaSpecProvider;
+	ComponentProvider <WhereNotDeletedCriteriaSpec>
+		whereNotDeletedCriteriaSpecProvider;
 
 	// properties
 
@@ -97,7 +101,10 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 
 		) {
 
-			return objectListPartProvider.get ()
+			return objectListPartProvider.provide (
+				transaction,
+				objectListPart ->
+					objectListPart
 
 				.consoleHelper (
 					consoleHelper)
@@ -113,7 +120,8 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 						mapIsNotEmpty (
 							listTabSpecs),
 						() -> listTabSpecs,
-						() -> defaultListTabSpecs ()))
+						() -> defaultListTabSpecs (
+							transaction)))
 
 				.formType (
 					formType)
@@ -124,22 +132,33 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 				.targetContextTypeName (
 					targetContextTypeName)
 
-			;
+			);
 
 		}
 
 	}
 
 	private
-	Map <String, ObjectListTabSpec> defaultListTabSpecs () {
+	Map <String, ObjectListTabSpec> defaultListTabSpecs (
+			@NonNull TaskLogger parentTaskLogger) {
 
-		if (consoleHelper.deletedExists ()) {
+		try (
 
-			return ImmutableMap.<String,ObjectListTabSpec>builder ()
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"defaultListTabSpecs");
 
-				.put (
-					"all",
-					objectListTabSpecProvider.get ()
+		) {
+
+			if (consoleHelper.deletedExists ()) {
+
+				return ImmutableMap.<String,ObjectListTabSpec>builder ()
+
+					.put (
+						"all",
+						objectListTabSpecProvider.provide (
+							taskLogger)
 
 						.name (
 							"all")
@@ -150,11 +169,15 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 								consoleHelper.shortNamePlural ()))
 
 						.addCriteria (
-							whereNotDeletedCriteriaSpecProvider.get ()))
+							whereNotDeletedCriteriaSpecProvider.provide (
+								taskLogger))
 
-				.put (
-					"deleted",
-					objectListTabSpecProvider.get ()
+					)
+
+					.put (
+						"deleted",
+						objectListTabSpecProvider.provide (
+							taskLogger)
 
 						.name (
 							"deleted")
@@ -163,30 +186,41 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 							"Deleted")
 
 						.addCriteria (
-							whereDeletedCriteriaSpecProvider.get ())
+							whereDeletedCriteriaSpecProvider.provide (
+								taskLogger))
 
 						.addCriteria (
-							whereICanManageCriteriaSpecProvider.get ()))
+							whereICanManageCriteriaSpecProvider.provide (
+								taskLogger))
 
-				.build ();
+					)
 
-		} else {
+					.build ();
 
-			return ImmutableMap.<String,ObjectListTabSpec>builder ()
+			} else {
 
-				.put (
-					"all",
-					objectListTabSpecProvider.get ()
+				return ImmutableMap.<String,ObjectListTabSpec>builder ()
 
-						.name (
-							"all")
+					.put (
+						"all",
+						objectListTabSpecProvider.provide (
+							taskLogger)
 
-						.label (
-							stringFormat (
-								"All %s",
-								consoleHelper.shortNamePlural ())))
+							.name (
+								"all")
 
-				.build ();
+							.label (
+								stringFormat (
+									"All %s",
+									consoleHelper.shortNamePlural ()))
+
+					)
+
+					.build ()
+
+				;
+
+			}
 
 		}
 

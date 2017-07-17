@@ -1,5 +1,7 @@
 package wbs.platform.deployment.logic;
 
+import com.google.common.base.Optional;
+
 import wbs.framework.database.Transaction;
 
 import wbs.platform.deployment.model.ApiDeploymentRec;
@@ -11,13 +13,13 @@ interface DeploymentLogic {
 
 	//AgentDeploymentRec thisAgentDeployment ();
 
-	ApiDeploymentRec thisApiDeployment (
+	Optional <ApiDeploymentRec> thisApiDeployment (
 			Transaction parentTransaction);
 
-	ConsoleDeploymentRec thisConsoleDeployment (
+	Optional <ConsoleDeploymentRec> thisConsoleDeployment (
 			Transaction parentTransaction);
 
-	DaemonDeploymentRec thisDaemonDeployment (
+	Optional <DaemonDeploymentRec> thisDaemonDeployment (
 			Transaction parentTransaction);
 
 	String gitVersion ();

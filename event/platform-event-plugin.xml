@@ -13,6 +13,7 @@
 	</models>
 
 	<layer name="fixture">
+		<component class="logic.EventFixtureLogicImplementation"/>
 		<component class="fixture.EventTypeBuilder"/>
 		<component class="fixture.EventTypesBuilder"/>
 	</layer>

@@ -24,8 +24,6 @@ import static wbs.utils.time.TimeUtils.instantToDateNullSafe;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -49,6 +47,7 @@ import wbs.console.request.ConsoleRequestContext;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
@@ -56,6 +55,7 @@ import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.PermanentRecord;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.event.logic.EventLogic;
@@ -123,13 +123,13 @@ class ObjectCreateAction <
 	String typeCode;
 
 	@Getter @Setter
-	Provider <WebResponder> responderProvider;
+	ComponentProvider <WebResponder> responderProvider;
 
 	@Getter @Setter
 	String targetContextTypeName;
 
 	@Getter @Setter
-	Provider <WebResponder> targetResponderProvider;
+	ComponentProvider <WebResponder> targetResponderProvider;
 
 	@Getter @Setter
 	String createPrivDelegate;
@@ -162,7 +162,19 @@ class ObjectCreateAction <
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return responderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return responderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
@@ -185,7 +197,7 @@ class ObjectCreateAction <
 
 			parentHelper =
 				genericCastUnchecked (
-					objectManager.findConsoleHelperRequired (
+					objectManager.consoleHelperForClassRequired (
 						consoleHelper.parentClassRequired ()));
 
 			// determine parent
@@ -487,7 +499,8 @@ class ObjectCreateAction <
 
 			}
 
-			return targetResponderProvider.get ();
+			return targetResponderProvider.provide (
+				transaction);
 
 		}
 

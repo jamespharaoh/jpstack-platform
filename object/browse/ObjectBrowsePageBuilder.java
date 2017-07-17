@@ -5,8 +5,6 @@ import static wbs.utils.string.StringUtils.stringFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.context.ConsoleContextBuilderContainer;
@@ -24,7 +22,6 @@ import wbs.console.module.ConsoleModuleBuilderComponent;
 import wbs.console.module.ConsoleModuleImplementation;
 import wbs.console.responder.ConsoleFile;
 import wbs.console.tab.ConsoleContextTab;
-import wbs.console.tab.TabContextResponder;
 
 import wbs.framework.builder.Builder;
 import wbs.framework.builder.annotations.BuildMethod;
@@ -35,6 +32,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -66,16 +64,10 @@ class ObjectBrowsePageBuilder <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ConsoleFile> consoleFile;
+	ComponentProvider <ConsoleFile> consoleFileProvider;
 
 	@PrototypeDependency
-	Provider <ConsoleContextTab> contextTab;
-
-	@PrototypeDependency
-	Provider <ObjectBrowsePart <ObjectType>> objectBrowsePart;
-
-	@PrototypeDependency
-	Provider <TabContextResponder> tabContextResponder;
+	ComponentProvider <ConsoleContextTab> contextTabProvider;
 
 	// builder
 
@@ -120,6 +112,7 @@ class ObjectBrowsePageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -155,8 +148,10 @@ class ObjectBrowsePageBuilder <
 			consoleModule.addContextTab (
 				taskLogger,
 				container.tabLocation (),
-
-				contextTab.get ()
+				contextTabProvider.provide (
+					taskLogger,
+					contextTab ->
+						contextTab
 
 					.name (
 						container.pathPrefix () + ".browse")
@@ -165,8 +160,9 @@ class ObjectBrowsePageBuilder <
 						"Browse")
 
 					.localFile (
-						container.pathPrefix () + ".browse"),
+						container.pathPrefix () + ".browse")
 
+				),
 				extensionPoint.contextTypeNames ());
 
 		}
@@ -187,19 +183,20 @@ class ObjectBrowsePageBuilder <
 		) {
 
 			consoleModule.addContextFile (
-
 				container.pathPrefix () + ".browse",
-
-				consoleFile.get ()
+				consoleFileProvider.provide (
+					taskLogger,
+					consoleFile ->
+						consoleFile
 
 					.getResponderName (
 						taskLogger,
 						stringFormat (
 							"%sBrowseResponder",
-							container.newBeanNamePrefix ())),
+							container.newBeanNamePrefix ()))
 
-				extensionPoint.contextTypeNames ()
-			);
+				),
+				extensionPoint.contextTypeNames ());
 
 		}
 

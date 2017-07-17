@@ -3,7 +3,7 @@ package wbs.platform.currency.logic;
 import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.NumberUtils.parseIntegerRequired;
-import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
+import static wbs.utils.etc.OptionalUtils.optionalOrThrow;
 import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.string.StringUtils.joinWithPipe;
 import static wbs.utils.string.StringUtils.joinWithoutSeparator;
@@ -359,10 +359,27 @@ class CurrencyLogicImplementation
 			@NonNull CurrencyRec currency,
 			@NonNull String text) {
 
-		return optionalGetRequired (
+		return optionalOrThrow (
 			parseText (
 				currency,
-				text));
+				text),
+			() -> new IllegalArgumentException (
+				stringFormat (
+					"Cannot parse \"%s\" as currency \"%s.%s\"",
+					text,
+					currency.getSlice ().getCode (),
+					currency.getCode ())));
+
+	}
+
+	@Override
+	public
+	Double toFloat (
+			@NonNull CurrencyRec currency,
+			@NonNull Long amount) {
+
+		return (double) amount
+			/ (double) currency.getDivisions ();
 
 	}
 

@@ -21,8 +21,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
@@ -45,6 +43,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.database.Transaction;
@@ -93,10 +92,10 @@ class ObjectSearchPostAction <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <RedirectResponder> redirectResponderProvider;
+	ComponentProvider <RedirectResponder> redirectResponderProvider;
 
 	@PrototypeDependency
-	Provider <ObjectSearchCsvResponder <ResultType>>
+	ComponentProvider <ObjectSearchCsvResponder <ResultType>>
 		objectSearchCsvResponderProvider;
 
 	// properties
@@ -129,7 +128,7 @@ class ObjectSearchPostAction <
 	Map <String, ObjectSearchResultsMode <ResultType>> resultsModes;
 
 	@Getter @Setter
-	Provider <WebResponder> searchResponderProvider;
+	ComponentProvider <WebResponder> searchResponderProvider;
 
 	@Getter @Setter
 	String fileName;
@@ -175,11 +174,16 @@ class ObjectSearchPostAction <
 
 				transaction.commit ();
 
-				return redirectResponderProvider.get ()
+				return redirectResponderProvider.provide (
+					transaction,
+					redirectResponder ->
+						redirectResponder
 
 					.targetUrl (
 						requestContext.resolveLocalUrl (
-							"/" + fileName));
+							"/" + fileName))
+
+				);
 
 			}
 
@@ -214,7 +218,10 @@ class ObjectSearchPostAction <
 
 				transaction.commit ();
 
-				return objectSearchCsvResponderProvider.get ()
+				return objectSearchCsvResponderProvider.provide (
+					transaction,
+					objectSearchCsvResponder ->
+						objectSearchCsvResponder
 
 					.consoleHelper (
 						consoleHelper)
@@ -226,7 +233,9 @@ class ObjectSearchPostAction <
 						resultsDaoMethodName)
 
 					.sessionKey (
-						sessionKey);
+						sessionKey)
+
+				);
 
 			}
 
@@ -307,7 +316,8 @@ class ObjectSearchPostAction <
 
 				transaction.commit ();
 
-				return searchResponderProvider.get ();
+				return searchResponderProvider.provide (
+					transaction);
 
 			}
 
@@ -360,7 +370,8 @@ class ObjectSearchPostAction <
 
 				transaction.commit ();
 
-				return searchResponderProvider.get ();
+				return searchResponderProvider.provide (
+					transaction);
 
 			} else if (
 
@@ -394,7 +405,10 @@ class ObjectSearchPostAction <
 
 					transaction.commit ();
 
-					return redirectResponderProvider.get ()
+					return redirectResponderProvider.provide (
+						transaction,
+						redirectResponder ->
+							redirectResponder
 
 						.targetUrl (
 							requestContext.resolveContextUrlFormat (
@@ -404,7 +418,9 @@ class ObjectSearchPostAction <
 								consoleHelper.getPathId (
 									transaction,
 									objectIds.get (
-										0))));
+										0))))
+
+					);
 
 				} else {
 
@@ -416,14 +432,18 @@ class ObjectSearchPostAction <
 
 					transaction.commit ();
 
-					return redirectResponderProvider.get ()
+					return redirectResponderProvider.provide (
+						transaction,
+						redirectResponder ->
+							redirectResponder
 
 						.targetUrl (
 							requestContext.resolveLocalUrl (
 								consoleHelper.getDefaultLocalPathGeneric (
 									transaction,
-									object)));
+									object)))
 
+					);
 
 				}
 
@@ -450,11 +470,16 @@ class ObjectSearchPostAction <
 
 				transaction.commit ();
 
-				return redirectResponderProvider.get ()
+				return redirectResponderProvider.provide (
+					transaction,
+					redirectResponder ->
+						redirectResponder
 
 					.targetUrl (
 						requestContext.resolveLocalUrl (
-							"/" + fileName));
+							"/" + fileName))
+
+				);
 
 			}
 

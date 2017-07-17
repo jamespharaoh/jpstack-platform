@@ -8,8 +8,6 @@ import static wbs.utils.string.StringUtils.capitalise;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.forms.basic.IdentityFormFieldInterfaceMapping;
@@ -41,6 +39,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -64,44 +63,40 @@ class ImageFormFieldBuilder
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <DereferenceFormFieldAccessor>
-	dereferenceFormFieldAccessorProvider;
+	ComponentProvider <DereferenceFormFieldAccessor>
+		dereferenceFormFieldAccessorProvider;
 
 	@PrototypeDependency
-	Provider <IdentityFormFieldInterfaceMapping>
-	identityFormFieldInterfaceMappingProvider;
+	ComponentProvider <IdentityFormFieldInterfaceMapping>
+		identityFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <IdentityFormFieldNativeMapping>
-	identityFormFieldNativeMappingProvider;
+	ComponentProvider <IdentityFormFieldNativeMapping>
+		identityFormFieldNativeMappingProvider;
 
 	@PrototypeDependency
-	Provider <ImageCsvFormFieldInterfaceMapping>
-	imageCsvFormFieldInterfaceMappingProvider;
+	ComponentProvider <ImageCsvFormFieldInterfaceMapping>
+		imageCsvFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <NullFormFieldConstraintValidator>
-	nullFormFieldValueConstraintValidatorProvider;
+	ComponentProvider <NullFormFieldConstraintValidator>
+		nullFormFieldValueConstraintValidatorProvider;
 
 	@PrototypeDependency
-	Provider <ReadOnlyFormField>
-	readOnlyFormFieldProvider;
+	ComponentProvider <ReadOnlyFormField> readOnlyFormFieldProvider;
 
 	@PrototypeDependency
-	Provider <RequiredFormFieldValueValidator>
-	requiredFormFieldValueValidatorProvider;
+	ComponentProvider <RequiredFormFieldValueValidator>
+		requiredFormFieldValueValidatorProvider;
 
 	@PrototypeDependency
-	Provider <SimpleFormFieldAccessor>
-	simpleFormFieldAccessorProvider;
+	ComponentProvider <SimpleFormFieldAccessor> simpleFormFieldAccessorProvider;
 
 	@PrototypeDependency
-	Provider <ImageFormFieldRenderer>
-	imageFormFieldRendererProvider;
+	ComponentProvider <ImageFormFieldRenderer> imageFormFieldRendererProvider;
 
 	@PrototypeDependency
-	Provider <UpdatableFormField>
-	updatableFormFieldProvider;
+	ComponentProvider <UpdatableFormField> updatableFormFieldProvider;
 
 	// builder
 
@@ -140,7 +135,9 @@ class ImageFormFieldBuilder
 		) {
 
 			setDefaults ();
-			buildField ();
+
+			buildField (
+				taskLogger);
 
 		}
 
@@ -170,129 +167,165 @@ class ImageFormFieldBuilder
 
 	}
 
-	void buildField () {
+	void buildField (
+			@NonNull TaskLogger parentTaskLogger) {
 
-		// accessor
+		try (
 
-		FormFieldAccessor accessor;
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"buildField");
 
-		if (
-			isNotNull (
-				spec.fieldName ())
 		) {
 
-			accessor =
-				dereferenceFormFieldAccessorProvider.get ()
+			// accessor
 
-				.path (
-					spec.fieldName ());
+			FormFieldAccessor accessor;
 
-		} else {
+			if (
+				isNotNull (
+					spec.fieldName ())
+			) {
 
-			accessor =
-				simpleFormFieldAccessorProvider.get ()
+				accessor =
+					dereferenceFormFieldAccessorProvider.provide (
+						taskLogger,
+						dereferenceFormFieldAccessor ->
+							dereferenceFormFieldAccessor
+
+					.path (
+						spec.fieldName ())
+
+				);
+
+			} else {
+
+				accessor =
+					simpleFormFieldAccessorProvider.provide (
+						taskLogger,
+						simpleFormFieldAccessor ->
+							simpleFormFieldAccessor
+
+					.name (
+						name)
+
+					.nativeClass (
+						MediaRec.class)
+
+				);
+
+			}
+
+			// native mapping
+
+			ConsoleFormNativeMapping nativeMapping =
+				identityFormFieldNativeMappingProvider.provide (
+					taskLogger);
+
+			// value validator
+
+			List <FormFieldValueValidator> valueValidators =
+				new ArrayList<> ();
+
+			if (! nullable) {
+
+				valueValidators.add (
+					requiredFormFieldValueValidatorProvider.provide (
+						taskLogger));
+
+			}
+
+			// constraint validator
+
+			FormFieldConstraintValidator constraintValidator =
+				nullFormFieldValueConstraintValidatorProvider.provide (
+					taskLogger);
+
+			// interface mapping
+
+			FormFieldInterfaceMapping interfaceMapping =
+				identityFormFieldInterfaceMappingProvider.provide (
+					taskLogger);
+
+			// renderer
+
+			FormFieldRenderer renderer =
+				imageFormFieldRendererProvider.provide (
+					taskLogger,
+					imageFormFieldRenderer ->
+						imageFormFieldRenderer
 
 				.name (
 					name)
 
-				.nativeClass (
-					MediaRec.class);
+				.label (
+					label)
+
+				.nullable (
+					nullable)
+
+				.showFilename (
+					showFilename)
+
+			);
+
+			// update hook
+
+			FormFieldUpdateHook updateHook =
+				formFieldPluginManager.getUpdateHook (
+					taskLogger,
+					context,
+					context.containerClass (),
+					name);
+
+			// csv mapping
+
+			FormFieldInterfaceMapping csvMapping =
+				imageCsvFormFieldInterfaceMappingProvider.provide (
+					taskLogger);
+
+			// form field
+
+			formFieldSet.addFormItem (
+				updatableFormFieldProvider.provide (
+					taskLogger,
+					updatableFormField ->
+						updatableFormField
+
+				.name (
+					name)
+
+				.label (
+					label)
+
+				.accessor (
+					accessor)
+
+				.nativeMapping (
+					nativeMapping)
+
+				.valueValidators (
+					valueValidators)
+
+				.constraintValidator (
+					constraintValidator)
+
+				.interfaceMapping (
+					interfaceMapping)
+
+				.csvMapping (
+					csvMapping)
+
+				.renderer (
+					renderer)
+
+				.updateHook (
+					updateHook)
+
+			));
 
 		}
-
-		// native mapping
-
-		ConsoleFormNativeMapping nativeMapping =
-			identityFormFieldNativeMappingProvider.get ();
-
-		// value validator
-
-		List<FormFieldValueValidator> valueValidators =
-			new ArrayList<> ();
-
-		if (! nullable) {
-
-			valueValidators.add (
-				requiredFormFieldValueValidatorProvider.get ());
-
-		}
-
-		// constraint validator
-
-		FormFieldConstraintValidator constraintValidator =
-			nullFormFieldValueConstraintValidatorProvider.get ();
-
-		// interface mapping
-
-		FormFieldInterfaceMapping interfaceMapping =
-			identityFormFieldInterfaceMappingProvider.get ();
-
-		// renderer
-
-		FormFieldRenderer renderer =
-			imageFormFieldRendererProvider.get ()
-
-			.name (
-				name)
-
-			.label (
-				label)
-
-			.nullable (
-				nullable)
-
-			.showFilename (
-				showFilename);
-
-		// update hook
-
-		FormFieldUpdateHook updateHook =
-			formFieldPluginManager.getUpdateHook (
-				context,
-				context.containerClass (),
-				name);
-
-		// csv mapping
-
-		FormFieldInterfaceMapping csvMapping =
-			imageCsvFormFieldInterfaceMappingProvider.get ();
-
-		// form field
-
-		formFieldSet.addFormItem (
-			updatableFormFieldProvider.get ()
-
-			.name (
-				name)
-
-			.label (
-				label)
-
-			.accessor (
-				accessor)
-
-			.nativeMapping (
-				nativeMapping)
-
-			.valueValidators (
-				valueValidators)
-
-			.constraintValidator (
-				constraintValidator)
-
-			.interfaceMapping (
-				interfaceMapping)
-
-			.csvMapping (
-				csvMapping)
-
-			.renderer (
-				renderer)
-
-			.updateHook (
-				updateHook)
-
-		);
 
 	}
 

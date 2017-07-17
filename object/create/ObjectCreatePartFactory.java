@@ -1,7 +1,5 @@
 package wbs.platform.object.create;
 
-import javax.inject.Provider;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -14,6 +12,7 @@ import wbs.console.part.PagePartFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -32,7 +31,8 @@ class ObjectCreatePartFactory <RecordType extends Record <RecordType>>
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectCreatePart <RecordType, ?>> objectCreatePartProvider;
+	ComponentProvider <ObjectCreatePart <RecordType, ?>>
+		objectCreatePartProvider;
 
 	// properties
 
@@ -41,9 +41,6 @@ class ObjectCreatePartFactory <RecordType extends Record <RecordType>>
 
 	@Getter @Setter
 	ConsoleFormType <RecordType> formType;
-
-	@Getter @Setter
-	String createPrivCode;
 
 	@Getter @Setter
 	String localFile;
@@ -64,7 +61,10 @@ class ObjectCreatePartFactory <RecordType extends Record <RecordType>>
 
 		) {
 
-			return objectCreatePartProvider.get ()
+			return objectCreatePartProvider.provide (
+				transaction,
+				objectCreatePart ->
+					objectCreatePart
 
 				.consoleHelper (
 					consoleHelper)
@@ -72,11 +72,10 @@ class ObjectCreatePartFactory <RecordType extends Record <RecordType>>
 				.formType (
 					formType)
 
-				.parentPrivCode (
-					createPrivCode)
-
 				.localFile (
-					localFile);
+					localFile)
+
+			);
 
 		}
 

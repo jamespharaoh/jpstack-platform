@@ -4,6 +4,7 @@ import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
@@ -27,6 +28,9 @@ class FeatureFixtureProvider
 
 	@SingletonDependency
 	MenuItemObjectHelper menuItemHelper;
+
+	@SingletonDependency
+	WbsConfig wbsConfig;
 
 	// public implementation
 
@@ -74,7 +78,7 @@ class FeatureFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"internal"))
 
 				.setCode (

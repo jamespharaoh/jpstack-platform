@@ -14,8 +14,6 @@ import static wbs.utils.string.StringUtils.stringSplitFullStop;
 
 import java.util.List;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.NonNull;
@@ -29,9 +27,11 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.config.WbsConfig;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.service.model.ServiceObjectHelper;
@@ -74,11 +74,11 @@ class CoreLogonAction
 
 	@PrototypeDependency
 	@NamedDependency ("coreLogonResponder")
-	Provider <WebResponder> logonResponderProvider;
+	ComponentProvider <WebResponder> logonResponderProvider;
 
 	@PrototypeDependency
 	@NamedDependency ("coreRedirectResponder")
-	Provider <WebResponder> redirectResponderProvider;
+	ComponentProvider <WebResponder> redirectResponderProvider;
 
 	// details
 
@@ -87,7 +87,19 @@ class CoreLogonAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return logonResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return logonResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
@@ -251,7 +263,8 @@ class CoreLogonAction
 
 			// and redirect to the console proper
 
-			return redirectResponderProvider.get ();
+			return redirectResponderProvider.provide (
+				transaction);
 
 		}
 

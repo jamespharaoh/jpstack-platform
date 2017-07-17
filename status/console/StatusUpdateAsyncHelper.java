@@ -3,7 +3,7 @@ package wbs.platform.status.console;
 import static wbs.utils.collection.IterableUtils.iterableMapToList;
 import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.etc.OptionalUtils.optionalFromNullable;
+import static wbs.utils.etc.OptionalUtils.optionalMapRequired;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.string.StringUtils.emptyStringIfNull;
@@ -12,6 +12,7 @@ import static wbs.utils.string.StringUtils.joinWithSeparator;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import com.google.common.base.Optional;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -216,7 +217,7 @@ class StatusUpdateAsyncHelper
 					transaction,
 					0l);
 
-			ConsoleDeploymentRec consoleDeployment =
+			Optional <ConsoleDeploymentRec> consoleDeploymentOptional =
 				deploymentLogic.thisConsoleDeployment (
 					transaction);
 
@@ -230,9 +231,11 @@ class StatusUpdateAsyncHelper
 					presentInstances (
 						optionalOf (
 							"Status"),
-						optionalFromNullable (
-							consoleDeployment.getStatusLabel ()),
-							optionalOf (
+						optionalMapRequired (
+							consoleDeploymentOptional,
+							consoleDeployment ->
+								consoleDeployment.getStatusLabel ()),
+						optionalOf (
 							deploymentLogic.gitVersion ()))));
 
 			update.addProperty (

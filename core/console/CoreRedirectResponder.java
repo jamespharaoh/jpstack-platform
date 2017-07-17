@@ -1,7 +1,5 @@
 package wbs.platform.core.console;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 
@@ -20,9 +18,7 @@ import wbs.web.responder.WebResponder;
 @PrototypeComponent ("coreRedirectResponder")
 public
 class CoreRedirectResponder
-	implements
-		Provider <WebResponder>,
-		WebResponder {
+	implements WebResponder {
 
 	// singleton dependencies
 
@@ -52,14 +48,6 @@ class CoreRedirectResponder
 				requestContext.applicationPathPrefix ());
 
 		}
-
-	}
-
-	@Override
-	public
-	WebResponder get () {
-
-		return this;
 
 	}
 

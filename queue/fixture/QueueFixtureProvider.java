@@ -5,6 +5,7 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
@@ -33,6 +34,9 @@ class QueueFixtureProvider
 
 	@SingletonDependency
 	MenuItemObjectHelper menuItemHelper;
+
+	@SingletonDependency
+	WbsConfig wbsConfig;
 
 	// implementation
 
@@ -81,7 +85,7 @@ class QueueFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"system"))
 
 				.setCode (

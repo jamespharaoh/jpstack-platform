@@ -23,12 +23,16 @@ interface CurrencyLogic {
 			CurrencyRec currency,
 			Long credit);
 
-	Optional<Long> parseText (
+	Optional <Long> parseText (
 			CurrencyRec currency,
 			String text);
 
 	Long parseTextRequired (
 			CurrencyRec currency,
 			String text);
+
+	Double toFloat (
+			CurrencyRec currency,
+			Long amount);
 
 }

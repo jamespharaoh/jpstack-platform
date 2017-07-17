@@ -2,8 +2,6 @@ package wbs.platform.object.search;
 
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -15,6 +13,7 @@ import wbs.console.part.PagePartFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.IdObject;
@@ -37,7 +36,7 @@ class ObjectSearchResultsPartFactory <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectSearchResultsPart <ObjectType, ResultType>>
+	ComponentProvider <ObjectSearchResultsPart <ObjectType, ResultType>>
 		objectSearchResultsPartProvider;
 
 	// properties
@@ -79,7 +78,10 @@ class ObjectSearchResultsPartFactory <
 
 		) {
 
-			return objectSearchResultsPartProvider.get ()
+			return objectSearchResultsPartProvider.provide (
+				transaction,
+				objectSearchResultsPart ->
+					objectSearchResultsPart
 
 				.consoleHelper (
 					consoleHelper)
@@ -102,7 +104,7 @@ class ObjectSearchResultsPartFactory <
 				.targetContextTypeName (
 					targetContextTypeName)
 
-			;
+			);
 
 		}
 

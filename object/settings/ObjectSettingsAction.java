@@ -7,8 +7,6 @@ import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -27,6 +25,7 @@ import wbs.console.request.ConsoleRequestContext;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
@@ -34,6 +33,7 @@ import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.PermanentRecord;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.utils.etc.PropertyUtils;
@@ -72,10 +72,10 @@ class ObjectSettingsAction <
 	ConsoleHelper <ObjectType> consoleHelper;
 
 	@Getter @Setter
-	Provider <WebResponder> detailsResponderProvider;
+	ComponentProvider <WebResponder> detailsResponderProvider;
 
 	@Getter @Setter
-	Provider <WebResponder> accessDeniedResponderProvider;
+	ComponentProvider <WebResponder> accessDeniedResponderProvider;
 
 	@Getter @Setter
 	String editPrivKey;
@@ -101,7 +101,19 @@ class ObjectSettingsAction <
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return detailsResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return detailsResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
@@ -129,7 +141,8 @@ class ObjectSettingsAction <
 				requestContext.addError (
 					"Access denied");
 
-				return accessDeniedResponderProvider.get ();
+				return accessDeniedResponderProvider.provide (
+					transaction);
 
 			}
 
@@ -214,6 +227,12 @@ class ObjectSettingsAction <
 
 			}
 
+			// call object hooks
+
+			consoleHelper.hooks ().beforeUpdate (
+				transaction,
+				object);
+
 			// commit
 
 			transaction.commit ();
@@ -221,7 +240,8 @@ class ObjectSettingsAction <
 			requestContext.addNotice (
 				"Settings updated");
 
-			return detailsResponderProvider.get ();
+			return detailsResponderProvider.provide (
+				transaction);
 
 		}
 
@@ -240,7 +260,7 @@ class ObjectSettingsAction <
 		) {
 
 			ConsoleHelper <ParentType> parentHelper =
-				objectManager.findConsoleHelperRequired (
+				objectManager.consoleHelperForClassRequired (
 					consoleHelper.parentClassRequired ());
 
 			if (parentHelper.isRoot ()) {

@@ -26,8 +26,6 @@ import static wbs.web.utils.HtmlUtils.htmlLinkWrite;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Provider;
-
 import com.google.common.collect.ImmutableList;
 
 import lombok.NonNull;
@@ -48,6 +46,7 @@ import wbs.framework.component.annotations.NamedDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -102,10 +101,10 @@ class QueueDebugPart
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <MasterQueueCache> masterQueueCacheProvider;
+	ComponentProvider <MasterQueueCache> masterQueueCacheProvider;
 
 	@PrototypeDependency
-	Provider <QueueSubjectSorter> queueSubjectSorterProvider;
+	ComponentProvider <QueueSubjectSorter> queueSubjectSorterProvider;
 
 	// state
 
@@ -144,10 +143,12 @@ class QueueDebugPart
 				transaction);
 
 			SortedQueueSubjects sortedQueueSubjects =
-				queueSubjectSorterProvider.get ()
+				queueSubjectSorterProvider.provide (
+					transaction)
 
 				.queueCache (
-					masterQueueCacheProvider.get ()
+					masterQueueCacheProvider.provide (
+						transaction)
 
 					.setup (
 						transaction)

@@ -3,8 +3,6 @@ package wbs.platform.user.console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.action.ConsoleAction;
@@ -16,9 +14,11 @@ import wbs.framework.component.annotations.NamedDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.event.logic.EventLogic;
@@ -71,7 +71,7 @@ class UserPrivsEditorAction
 
 	@PrototypeDependency
 	@NamedDependency ("userPrivsEditorResponder")
-	Provider <WebResponder> privsEditorResponderProvider;
+	ComponentProvider <WebResponder> privsEditorResponderProvider;
 
 	static
 	Pattern privDataPattern =
@@ -82,7 +82,19 @@ class UserPrivsEditorAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return privsEditorResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return privsEditorResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 

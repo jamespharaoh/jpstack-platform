@@ -1,12 +1,11 @@
 package wbs.platform.deployment.daemon;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.SingletonComponent;
-import wbs.framework.component.annotations.UninitializedDependency;
+import wbs.framework.component.annotations.StrongPrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.tools.ComponentFactory;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -25,10 +24,10 @@ class AgentThreadManager
 	@ClassSingletonDependency
 	LogContext logContext;
 
-	// unitialized dependencies
+	// prototype dependencies
 
-	@UninitializedDependency
-	Provider <ThreadManagerImplementation> threadManagerImplementationProvider;
+	@StrongPrototypeDependency
+	ComponentProvider <ThreadManagerImplementation> threadManagerProvider;
 
 	// components
 
@@ -43,12 +42,18 @@ class AgentThreadManager
 				logContext.nestTaskLogger (
 					parentTaskLogger,
 					"makeComponent");
+
 		) {
 
-			return threadManagerImplementationProvider.get ()
+			return threadManagerProvider.provide (
+				taskLogger,
+				threadManager ->
+					threadManager
 
 				.exceptionTypeCode (
-					"agent");
+					"agent")
+
+			);
 
 		}
 

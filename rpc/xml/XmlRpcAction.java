@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -32,6 +30,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -76,12 +75,12 @@ class XmlRpcAction
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <XmlResponder> xmlResponderProvider;
+	ComponentProvider <XmlResponder> xmlResponderProvider;
 
 	// properties
 
 	@Getter @Setter
-	Provider <? extends RpcHandler> rpcHandlerProvider;
+	ComponentProvider <? extends RpcHandler> rpcHandlerProvider;
 
 	// property setters
 
@@ -112,14 +111,27 @@ class XmlRpcAction
 	// implementation
 
 	public
-	WebResponder xmlInternalErrorResponder () {
+	WebResponder xmlInternalErrorResponder (
+			@NonNull TaskLogger parentTaskLogger) {
 
-		return makeRpcResponder (
-			Rpc.rpcError (
-				"FIXME",
-				Rpc.stInternalError,
-				"internal-error",
-				"An internal error has occurred"));
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"xmlInternalErrorResponder");
+
+		) {
+
+			return makeRpcResponder (
+				taskLogger,
+				Rpc.rpcError (
+					"FIXME",
+					Rpc.stInternalError,
+					"internal-error",
+					"An internal error has occurred"));
+
+		}
 
 	}
 
@@ -138,7 +150,8 @@ class XmlRpcAction
 		) {
 
 			return optionalOf (
-				xmlInternalErrorResponder ());
+				xmlInternalErrorResponder (
+					taskLogger));
 
 		}
 
@@ -146,15 +159,32 @@ class XmlRpcAction
 
 	private
 	WebResponder makeRpcResponder (
-			RpcResult result) {
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull RpcResult result) {
 
-		return xmlResponderProvider.get ()
+		try (
 
-			.data (
-				result.getStruct ())
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"makeRpcResponder");
 
-			.status (
-				result.getHttpStatus ());
+		) {
+
+			return xmlResponderProvider.provide (
+				taskLogger,
+				xmlResponder ->
+					xmlResponder
+
+				.data (
+					result.getStruct ())
+
+				.status (
+					result.getHttpStatus ())
+
+			);
+
+		}
 
 	}
 
@@ -177,7 +207,9 @@ class XmlRpcAction
 					parentTaskLogger);
 
 			return ret != null
-				? makeRpcResponder (ret)
+				? makeRpcResponder (
+					taskLogger,
+					ret)
 				: null;
 
 		}
@@ -265,7 +297,8 @@ class XmlRpcAction
 					requestContext.inputStream ());
 
 			RpcHandler rpcHandler =
-				rpcHandlerProvider.get ();
+				rpcHandlerProvider.provide (
+					taskLogger);
 
 			return rpcHandler.handle (
 				taskLogger,

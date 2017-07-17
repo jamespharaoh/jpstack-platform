@@ -1,16 +1,29 @@
 package wbs.platform.user.fixture;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
+import static wbs.utils.string.StringUtils.stringSplitComma;
+
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
 import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
 import wbs.framework.fixtures.FixtureProvider;
+import wbs.framework.fixtures.TestAccounts;
 import wbs.framework.logging.LogContext;
 
+import wbs.platform.event.logic.EventFixtureLogic;
+import wbs.platform.event.logic.EventLogic;
 import wbs.platform.menu.model.MenuGroupObjectHelper;
 import wbs.platform.menu.model.MenuItemObjectHelper;
 import wbs.platform.priv.model.PrivObjectHelper;
@@ -28,6 +41,12 @@ class UserFixtureProvider
 
 	// singleton dependencies
 
+	@SingletonDependency
+	EventFixtureLogic eventFixtureLogic;
+
+	@SingletonDependency
+	EventLogic eventLogic;
+
 	@ClassSingletonDependency
 	LogContext logContext;
 
@@ -44,10 +63,16 @@ class UserFixtureProvider
 	SliceObjectHelper sliceHelper;
 
 	@SingletonDependency
+	TestAccounts testAccounts;
+
+	@SingletonDependency
 	UserObjectHelper userHelper;
 
 	@SingletonDependency
 	UserPrivObjectHelper userPrivHelper;
+
+	@SingletonDependency
+	WbsConfig wbsConfig;
 
 	// implementation
 
@@ -65,86 +90,28 @@ class UserFixtureProvider
 
 		) {
 
-			PrivRec rootManagePriv =
-				privHelper.findByCodeRequired (
-					transaction,
-					GlobalId.root,
-					"manage");
+			createMenuItems (
+				transaction);
 
-			PrivRec rootDebugPriv =
-				privHelper.findByCodeRequired (
-					transaction,
-					GlobalId.root,
-					"debug");
+			createUsers (
+				transaction);
 
-			SliceRec testSlice =
-				sliceHelper.findByCodeRequired (
-					transaction,
-					GlobalId.root,
-					"test");
+		}
 
-			for (
-				int index = 0;
-				index < 10;
-				index ++
-			) {
+	}
 
-				UserRec testUser =
-					userHelper.insert (
-						transaction,
-						userHelper.createInstance ()
+	private
+	void createMenuItems (
+			@NonNull Transaction parentTransaction) {
 
-					.setUsername (
-						"test" + index)
+		try (
 
-					.setPassword (
-						"qUqP5cyxm6YcTAhz05Hph5gvu9M=")
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"createMenuItems");
 
-					.setFullname (
-						"Test " + index)
-
-					.setDetails (
-						"Test user " + index)
-
-					.setActive (
-						true)
-
-					.setSlice (
-						testSlice)
-
-				);
-
-				userPrivHelper.insert (
-					transaction,
-					userPrivHelper.createInstance ()
-
-					.setUser (
-						testUser)
-
-					.setPriv (
-						rootManagePriv)
-
-					.setCan (
-						true)
-
-				);
-
-				userPrivHelper.insert (
-					transaction,
-					userPrivHelper.createInstance ()
-
-					.setUser (
-						testUser)
-
-					.setPriv (
-						rootDebugPriv)
-
-					.setCan (
-						true)
-
-				);
-
-			}
+		) {
 
 			menuItemHelper.insert (
 				transaction,
@@ -154,7 +121,7 @@ class UserFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"system"))
 
 				.setCode (
@@ -176,6 +143,119 @@ class UserFixtureProvider
 					"main")
 
 			);
+
+		}
+
+	}
+
+	private
+	void createUsers (
+			@NonNull Transaction parentTransaction) {
+
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"createUsers");
+
+		) {
+
+			Set <String> ignoreParams =
+				ImmutableSet.of (
+					"slice",
+					"password-hash",
+					"privs");
+
+			testAccounts.forEach (
+				"user",
+				suppliedParams -> {
+
+				Map <String, String> allParams =
+					ImmutableMap.<String, String> builder ()
+
+					.putAll (
+						suppliedParams)
+
+					.put (
+						"active",
+						"yes")
+
+					.build ()
+
+				;
+
+				SliceRec slice =
+					sliceHelper.findByCodeRequired (
+						transaction,
+						GlobalId.root,
+						mapItemForKeyRequired (
+							suppliedParams,
+							"slice"));
+
+				UserRec user =
+					eventFixtureLogic.createRecordAndEvents (
+						transaction,
+						"Deployment",
+						userHelper,
+						slice,
+						allParams,
+						ignoreParams);
+
+				user
+
+					.setPassword (
+						mapItemForKeyRequired (
+							suppliedParams,
+							"password-hash"))
+
+				;
+
+				eventLogic.createEvent (
+					transaction,
+					"user_password_set_by_fixture",
+					"User",
+					user);
+
+				for (
+					String privCode
+						: stringSplitComma (
+							mapItemForKeyRequired (
+								suppliedParams,
+								"privs"))
+				) {
+
+					PrivRec priv =
+						privHelper.findByCodeRequired (
+							transaction,
+							GlobalId.root,
+							privCode);
+
+					userPrivHelper.insert (
+						transaction,
+						userPrivHelper.createInstance ()
+
+						.setUser (
+							user)
+
+						.setPriv (
+							priv)
+
+						.setCan (
+							true)
+
+					);
+
+					eventLogic.createEvent (
+						transaction,
+						"user_grant_by_fixture",
+						"User",
+						user,
+						priv);
+
+				}
+
+			});
 
 		}
 

@@ -2,8 +2,6 @@ package wbs.platform.object.search;
 
 import java.io.Serializable;
 
-import javax.inject.Provider;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -16,6 +14,7 @@ import wbs.console.part.PagePartFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -37,7 +36,7 @@ class ObjectSearchPartFactory <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectSearchPart <ObjectType, SearchType>>
+	ComponentProvider <ObjectSearchPart <ObjectType, SearchType>>
 		objectSearchPartProvider;
 
 	// properties
@@ -73,7 +72,8 @@ class ObjectSearchPartFactory <
 
 		) {
 
-			return objectSearchPartProvider.get ()
+			return objectSearchPartProvider.provide (
+				transaction)
 
 				.consoleHelper (
 					consoleHelper)
@@ -88,7 +88,9 @@ class ObjectSearchPartFactory <
 					searchFormType)
 
 				.fileName (
-					fileName);
+					fileName)
+
+			;
 
 		}
 

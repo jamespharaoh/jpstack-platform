@@ -141,6 +141,7 @@ class ObjectCreatePageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint extensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -335,16 +336,6 @@ class ObjectCreatePageBuilder <
 							"%sSettingsResponder",
 							consoleHelper.objectName ())),
 					WebResponder.class);
-
-			createPrivDelegate =
-				spec.createPrivDelegate ();
-
-			createPrivCode =
-				ifNull (
-					spec.createPrivCode (),
-					stringFormat (
-						"%s_create",
-						consoleHelper.objectTypeCode ()));
 
 			createTimeFieldName =
 				spec.createTimeFieldName ();

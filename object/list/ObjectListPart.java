@@ -367,7 +367,7 @@ class ObjectListPart <
 
 				ConsoleHelper <ParentType> parentHelper =
 					genericCastUnchecked (
-						objectManager.findConsoleHelperRequired (
+						objectManager.consoleHelperForClassRequired (
 							consoleHelper.parentClassRequired ()));
 
 				Long parentId =
@@ -402,7 +402,7 @@ class ObjectListPart <
 				) {
 
 					ConsoleHelper<?> grandParentHelper =
-						objectManager.findConsoleHelperRequired (
+						objectManager.consoleHelperForClassRequired (
 							parentHelper.parentClassRequired ());
 
 					Optional <Long> grandParentIdOptional =
@@ -704,8 +704,6 @@ class ObjectListPart <
 					object);
 
 			}
-
-			// TODO i hate generics
 
 			Collections.sort (
 				selectedObjects,

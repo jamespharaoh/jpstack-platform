@@ -4,8 +4,6 @@ import static wbs.utils.etc.EnumUtils.enumNotEqualSafe;
 import static wbs.utils.etc.LogicUtils.referenceEqualWithClass;
 import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.action.ConsoleAction;
@@ -15,11 +13,13 @@ import wbs.framework.component.annotations.NamedDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.queue.model.QueueItemRec;
@@ -55,7 +55,7 @@ class QueueItemActionsAction
 
 	@PrototypeDependency
 	@NamedDependency ("queueItemActionsResponder")
-	Provider <WebResponder> actionsResponderProvider;
+	ComponentProvider <WebResponder> actionsResponderProvider;
 
 	// state
 
@@ -72,7 +72,19 @@ class QueueItemActionsAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return actionsResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return actionsResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 

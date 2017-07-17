@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Provider;
-
 import com.google.gson.JsonObject;
 
 import lombok.Data;
@@ -30,6 +28,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.config.WbsConfig;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
@@ -77,7 +76,7 @@ class ConsoleAsyncSubscription <SubscriberState>
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <UserPrivCheckerBuilder> userPrivCheckerBuilderProvider;
+	ComponentProvider <UserPrivCheckerBuilder> userPrivCheckerBuilderProvider;
 
 	// properties
 
@@ -356,7 +355,8 @@ class ConsoleAsyncSubscription <SubscriberState>
 					subscriber.userId ());
 
 			UserPrivChecker privChecker =
-				userPrivCheckerBuilderProvider.get ()
+				userPrivCheckerBuilderProvider.provide (
+					transaction)
 
 				.userId (
 					subscriber.userId ())

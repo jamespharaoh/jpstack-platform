@@ -1,6 +1,5 @@
 package wbs.platform.postgresql.data;
 
-import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import lombok.NonNull;
@@ -9,7 +8,8 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.NamedDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
-import wbs.framework.component.annotations.UninitializedDependency;
+import wbs.framework.component.annotations.StrongPrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.tools.ComponentFactory;
 import wbs.framework.database.DbPool;
 import wbs.framework.logging.LogContext;
@@ -30,10 +30,10 @@ class PostgresqlDataSource
 	@NamedDependency
 	DataSource rootDataSource;
 
-	// uninitialized dependencies
+	// prototype dependencies
 
-	@UninitializedDependency
-	Provider <DbPool> dbPoolProvider;
+	@StrongPrototypeDependency
+	ComponentProvider <DbPool> dbPoolProvider;
 
 	// implementation
 
@@ -51,10 +51,15 @@ class PostgresqlDataSource
 
 		) {
 
-			return dbPoolProvider.get ()
+			return dbPoolProvider.provide (
+				taskLogger,
+				dbPool ->
+					dbPool
 
 				.dataSource (
-					rootDataSource);
+					rootDataSource)
+
+			);
 
 		}
 

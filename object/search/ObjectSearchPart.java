@@ -1,7 +1,5 @@
 package wbs.platform.object.search;
 
-import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
-import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.TypeUtils.classInstantiate;
 import static wbs.web.utils.HtmlBlockUtils.htmlParagraphClose;
 import static wbs.web.utils.HtmlBlockUtils.htmlParagraphOpen;
@@ -16,7 +14,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -26,6 +23,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import wbs.console.forms.core.ConsoleForm;
+import wbs.console.forms.core.ConsoleFormHintsLogic;
 import wbs.console.forms.core.ConsoleFormType;
 import wbs.console.helper.core.ConsoleHelper;
 import wbs.console.helper.manager.ConsoleObjectManager;
@@ -57,6 +55,9 @@ class ObjectSearchPart <
 	extends AbstractPagePart {
 
 	// singleton dependencies
+
+	@SingletonDependency
+	ConsoleFormHintsLogic consoleFormHintsLogic;
 
 	@ClassSingletonDependency
 	LogContext logContext;
@@ -138,34 +139,10 @@ class ObjectSearchPart <
 			ImmutableMap.Builder <String, Object> formHintsBuilder =
 				ImmutableMap.builder ();
 
-			if (consoleHelper.parentExists ()) {
-
-				ConsoleHelper <?> parentHelper =
-					objectManager.findConsoleHelperRequired (
-						consoleHelper.parentClassRequired ());
-
-				Optional <Long> parentIdOptional =
-					requestContext.stuffInteger (
-						parentHelper.idKey ());
-
-				if (
-					optionalIsPresent (
-						parentIdOptional)
-				) {
-
-					Record <?> parent =
-						parentHelper.findRequired (
-							transaction,
-							optionalGetRequired (
-								parentIdOptional));
-
-					formHintsBuilder.put (
-						consoleHelper.parentFieldName (),
-						parent);
-
-				}
-
-			}
+			consoleFormHintsLogic.prepareParentHints (
+				transaction,
+				formHintsBuilder,
+				consoleHelper);
 
 			formHints =
 				formHintsBuilder.build ();
@@ -179,6 +156,9 @@ class ObjectSearchPart <
 					transaction,
 					formHints,
 					currentSearch);
+
+			searchForm.setDefaults (
+				transaction);
 
 			cleanSearch =
 				classInstantiate (

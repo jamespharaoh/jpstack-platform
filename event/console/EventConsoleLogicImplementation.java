@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.helper.manager.ConsoleObjectManager;
@@ -34,6 +32,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
@@ -84,7 +83,7 @@ class EventConsoleLogicImplementation
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ObjectEventsPart> objectEventsPart;
+	ComponentProvider <ObjectEventsPart> objectEventsPartProvider;
 
 	// implementation
 
@@ -128,10 +127,15 @@ class EventConsoleLogicImplementation
 
 			}
 
-			return objectEventsPart.get ()
+			return objectEventsPartProvider.provide (
+				transaction,
+				objectEventsPart ->
+					objectEventsPart
 
 				.dataObjectIds (
-					objectGlobalIds);
+					objectGlobalIds)
+
+			);
 
 		}
 

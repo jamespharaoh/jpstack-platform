@@ -4,8 +4,6 @@ import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.capitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
-import javax.inject.Provider;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -22,10 +20,12 @@ import wbs.console.request.ConsoleRequestContext;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.event.logic.EventLogic;
@@ -71,10 +71,10 @@ class ObjectRemoveAction
 	ConsoleHelper <?> parentHelper;
 
 	@Getter @Setter
-	Provider <WebResponder> settingsResponderProvider;
+	ComponentProvider <WebResponder> settingsResponderProvider;
 
 	@Getter @Setter
-	Provider <WebResponder> listResponderProvider;
+	ComponentProvider <WebResponder> listResponderProvider;
 
 	@Getter @Setter
 	String nextContextTypeName;
@@ -89,7 +89,19 @@ class ObjectRemoveAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return settingsResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return settingsResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
@@ -160,7 +172,8 @@ class ObjectRemoveAction
 				targetContext,
 				"/" + parentObject.getId ());
 
-			return listResponderProvider.get ();
+			return listResponderProvider.provide (
+				transaction);
 
 		}
 

@@ -9,8 +9,6 @@ import static wbs.utils.string.StringUtils.stringSplitComma;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -24,9 +22,11 @@ import wbs.console.request.ConsoleRequestContext;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.user.console.UserConsoleLogic;
@@ -63,10 +63,10 @@ class ObjectSearchGetAction
 	// properties
 
 	@Getter @Setter
-	Provider <WebResponder> searchResponderProvider;
+	ComponentProvider <WebResponder> searchResponderProvider;
 
 	@Getter @Setter
-	Provider <WebResponder> resultsResponderProvider;
+	ComponentProvider <WebResponder> resultsResponderProvider;
 
 	@Getter @Setter
 	String sessionKey;
@@ -78,7 +78,19 @@ class ObjectSearchGetAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return searchResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return searchResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
@@ -144,13 +156,15 @@ class ObjectSearchGetAction
 
 				transaction.commit ();
 
-				return searchResponderProvider.get ();
+				return searchResponderProvider.provide (
+					transaction);
 
 			} else {
 
 				transaction.commit ();
 
-				return resultsResponderProvider.get ();
+				return resultsResponderProvider.provide (
+					transaction);
 
 			}
 

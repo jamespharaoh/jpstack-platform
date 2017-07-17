@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
@@ -27,6 +25,7 @@ import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
 import wbs.framework.component.manager.ComponentMetaData;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.registry.ComponentDefinition;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
@@ -65,8 +64,8 @@ class BackgroundLogicImplementation
 	// prototype components
 
 	@PrototypeDependency
-	Provider <BackgroundProcessHelperImplementation>
-	backgroundProcessHelperImplementationProvider;
+	ComponentProvider <BackgroundProcessHelperImplementation>
+		backgroundProcessHelperImplementationProvider;
 
 	// state
 
@@ -143,7 +142,8 @@ class BackgroundLogicImplementation
 				backgroundProcessName,
 				componentDefinition.name ());
 
-			return backgroundProcessHelperImplementationProvider.get ()
+			return backgroundProcessHelperImplementationProvider.provide (
+				taskLogger)
 
 				.parentTypeCode (
 					parentTypeCode)

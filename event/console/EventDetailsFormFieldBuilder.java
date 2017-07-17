@@ -1,7 +1,5 @@
 package wbs.platform.event.console;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.forms.basic.IdentityFormFieldAccessor;
@@ -26,6 +24,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -47,24 +46,22 @@ class EventDetailsFormFieldBuilder
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <EventDetailsFormFieldInterfaceMapping>
-	eventDetailsFormFieldInterfaceMappingProvider;
+	ComponentProvider <EventDetailsFormFieldInterfaceMapping>
+		eventDetailsFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <HtmlFormFieldRenderer>
-	htmlFormFieldRendererProvider;
+	ComponentProvider <HtmlFormFieldRenderer> htmlFormFieldRendererProvider;
 
 	@PrototypeDependency
-	Provider <IdentityFormFieldAccessor>
-	identityFormFieldAccessorProvider;
+	ComponentProvider <IdentityFormFieldAccessor>
+		identityFormFieldAccessorProvider;
 
 	@PrototypeDependency
-	Provider <IdentityFormFieldNativeMapping>
-	identityFormFieldNativeMappingProvider;
+	ComponentProvider <IdentityFormFieldNativeMapping>
+		identityFormFieldNativeMappingProvider;
 
 	@PrototypeDependency
-	Provider <ReadOnlyFormField>
-	readOnlyFormFieldProvider;
+	ComponentProvider <ReadOnlyFormField> readOnlyFormFieldProvider;
 
 	// builder
 
@@ -104,36 +101,51 @@ class EventDetailsFormFieldBuilder
 			// accessor
 
 			FormFieldAccessor accessor =
-				identityFormFieldAccessorProvider.get ()
+				identityFormFieldAccessorProvider.provide (
+					taskLogger,
+					identityFormFieldAccessor ->
+						identityFormFieldAccessor
 
 				.containerClass (
-					context.containerClass ());
+					context.containerClass ())
+
+			);
 
 			// native mapping
 
 			ConsoleFormNativeMapping nativeMapping =
-				identityFormFieldNativeMappingProvider.get ();
+				identityFormFieldNativeMappingProvider.provide (
+					taskLogger);
 
 			// interface mapping
 
 			FormFieldInterfaceMapping interfaceMapping =
-				eventDetailsFormFieldInterfaceMappingProvider.get ();
+				eventDetailsFormFieldInterfaceMappingProvider.provide (
+					taskLogger);
 
 			// renderer
 
 			FormFieldRenderer renderer =
-				htmlFormFieldRendererProvider.get ()
+				htmlFormFieldRendererProvider.provide (
+					taskLogger,
+					nestedRenderer ->
+						nestedRenderer
 
 				.name (
 					name)
 
 				.label (
-					label);
+					label)
+
+			);
 
 			// form field
 
 			formFieldSet.addFormItem (
-				readOnlyFormFieldProvider.get ()
+				readOnlyFormFieldProvider.provide (
+					taskLogger,
+					formItem ->
+						formItem
 
 				.name (
 					name)
@@ -153,7 +165,7 @@ class EventDetailsFormFieldBuilder
 				.renderer (
 					renderer)
 
-			);
+			));
 
 		}
 

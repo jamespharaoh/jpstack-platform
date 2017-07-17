@@ -157,6 +157,7 @@ class ObjectSettingsPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -392,7 +393,7 @@ class ObjectSettingsPageBuilder <
 				genericCastUnchecked (
 					ifNotNullThenElse (
 						spec.objectName (),
-						() -> objectManager.findConsoleHelperRequired (
+						() -> objectManager.consoleHelperForNameRequired (
 							spec.objectName ()),
 						() -> container.consoleHelper ()));
 

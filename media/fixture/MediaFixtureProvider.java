@@ -5,12 +5,16 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
+import wbs.framework.entity.record.GlobalId;
 import wbs.framework.fixtures.FixtureProvider;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.media.model.MediaTypeObjectHelper;
+import wbs.platform.menu.model.MenuGroupObjectHelper;
+import wbs.platform.menu.model.MenuItemObjectHelper;
 
 @PrototypeComponent ("mediaFixtureProvider")
 public
@@ -25,7 +29,16 @@ class MediaFixtureProvider
 	@SingletonDependency
 	MediaTypeObjectHelper mediaTypeHelper;
 
-	// implementation
+	@SingletonDependency
+	MenuGroupObjectHelper menuGroupHelper;
+
+	@SingletonDependency
+	MenuItemObjectHelper menuItemHelper;
+
+	@SingletonDependency
+	WbsConfig wbsConfig;
+
+	// public implementation
 
 	@Override
 	public
@@ -41,6 +54,9 @@ class MediaFixtureProvider
 
 		) {
 
+			createMenuItems (
+				transaction);
+
 			createTextMediaTypes (
 				transaction);
 
@@ -49,6 +65,56 @@ class MediaFixtureProvider
 
 			createVideoMediaTypes (
 				transaction);
+
+		}
+
+	}
+
+	// private implementation
+
+	private
+	void createMenuItems (
+			@NonNull Transaction parentTransaction) {
+
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"createMenuItems");
+
+		) {
+
+			menuItemHelper.insert (
+				transaction,
+				menuItemHelper.createInstance ()
+
+				.setMenuGroup (
+					menuGroupHelper.findByCodeRequired (
+						transaction,
+						GlobalId.root,
+						wbsConfig.defaultSlice (),
+						"internal"))
+
+				.setCode (
+					"media_type")
+
+				.setName (
+					"Media type")
+
+				.setDescription (
+					"")
+
+				.setLabel (
+					"Media types")
+
+				.setTargetPath (
+					"/mediaTypes")
+
+				.setTargetFrame (
+					"main")
+
+			);
 
 		}
 

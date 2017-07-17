@@ -6,7 +6,6 @@ import static wbs.utils.string.StringUtils.capitalise;
 import static wbs.utils.string.StringUtils.capitaliseFormat;
 import static wbs.utils.string.StringUtils.hyphenToCamel;
 import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
-import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -108,14 +107,6 @@ class ObjectCreatePageComponentBuilder
 						capitalise (
 							name)));
 
-			String createPrivCode =
-				ifNull (
-					spec.createPrivCode (),
-					stringFormat (
-						"%s_create",
-						hyphenToUnderscore (
-							context.objectType ())));
-
 			String localFile =
 				ifNull (
 					spec.localFile (),
@@ -155,11 +146,6 @@ class ObjectCreatePageComponentBuilder
 						context.consoleModule ().name ()),
 					hyphenToCamelCapitalise (
 						spec.formTypeName ()))
-
-				.addValueProperty (
-					"createPrivCode",
-					optionalOf (
-						createPrivCode))
 
 				.addValueProperty (
 					"localFile",

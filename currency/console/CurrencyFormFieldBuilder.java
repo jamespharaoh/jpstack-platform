@@ -11,8 +11,6 @@ import static wbs.utils.string.StringUtils.stringFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import org.apache.commons.lang3.Range;
@@ -51,6 +49,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -75,52 +74,49 @@ class CurrencyFormFieldBuilder
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <CurrencyFormFieldInterfaceMapping>
-	currencyFormFieldInterfaceMappingProvider;
+	ComponentProvider <CurrencyFormFieldInterfaceMapping>
+		currencyFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <DereferenceFormFieldAccessor>
-	dereferenceFormFieldAccessorProvider;
+	ComponentProvider <DereferenceFormFieldAccessor>
+		dereferenceFormFieldAccessorProvider;
 
 	@PrototypeDependency
-	Provider <IdentityFormFieldNativeMapping>
-	identityFormFieldNativeMappingProvider;
+	ComponentProvider <IdentityFormFieldNativeMapping>
+		identityFormFieldNativeMappingProvider;
 
 	@PrototypeDependency
-	Provider <IntegerFormFieldInterfaceMapping>
-	integerFormFieldInterfaceMappingProvider;
+	ComponentProvider <IntegerFormFieldInterfaceMapping>
+		integerFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <IntegerFormFieldValueValidator>
-	integerFormFieldValueValidatorProvider;
+	ComponentProvider <IntegerFormFieldValueValidator>
+		integerFormFieldValueValidatorProvider;
 
 	@PrototypeDependency
-	Provider <NullFormFieldConstraintValidator>
-	nullFormFieldValueConstraintValidatorProvider;
+	ComponentProvider <NullFormFieldConstraintValidator>
+		nullFormFieldValueConstraintValidatorProvider;
 
 	@PrototypeDependency
-	Provider <RangeFormFieldInterfaceMapping>
-	rangeFormFieldInterfaceMappingProvider;
+	ComponentProvider <RangeFormFieldInterfaceMapping>
+		rangeFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <ReadOnlyFormField>
-	readOnlyFormFieldProvider;
+	ComponentProvider <ReadOnlyFormField> readOnlyFormFieldProvider;
 
 	@PrototypeDependency
-	Provider <RequiredFormFieldValueValidator>
-	requiredFormFieldValueValidatorProvider;
+	ComponentProvider <RequiredFormFieldValueValidator>
+		requiredFormFieldValueValidatorProvider;
 
 	@PrototypeDependency
-	Provider <TextFormFieldRenderer>
-	textFormFieldRendererProvider;
+	ComponentProvider <TextFormFieldRenderer> textFormFieldRendererProvider;
 
 	@PrototypeDependency
-	Provider <TextualRangeFormFieldInterfaceMapping>
-	textualRangeFormFieldInterfaceMappingProvider;
+	ComponentProvider <TextualRangeFormFieldInterfaceMapping>
+		textualRangeFormFieldInterfaceMappingProvider;
 
 	@PrototypeDependency
-	Provider <UpdatableFormField>
-	updatableFormFieldProvider;
+	ComponentProvider <UpdatableFormField> updatableFormFieldProvider;
 
 	// builder
 
@@ -205,7 +201,8 @@ class CurrencyFormFieldBuilder
 			// accessor
 
 			FormFieldAccessor accessor =
-				dereferenceFormFieldAccessorProvider.get ()
+				dereferenceFormFieldAccessorProvider.provide (
+					taskLogger)
 
 				.path (
 					fieldName)
@@ -222,14 +219,16 @@ class CurrencyFormFieldBuilder
 			if (propertyClass == Long.class) {
 
 				nativeMapping =
-					identityFormFieldNativeMappingProvider.get ();
+					identityFormFieldNativeMappingProvider.provide (
+						taskLogger);
 
 				range = false;
 
 			} else if (propertyClass == Range.class) {
 
 				nativeMapping =
-					identityFormFieldNativeMappingProvider.get ();
+					identityFormFieldNativeMappingProvider.provide (
+						taskLogger);
 
 				range = true;
 
@@ -254,12 +253,14 @@ class CurrencyFormFieldBuilder
 			if (! nullable) {
 
 				valueValidators.add (
-					requiredFormFieldValueValidatorProvider.get ());
+					requiredFormFieldValueValidatorProvider.provide (
+						taskLogger));
 
 			}
 
 			valueValidators.add (
-				integerFormFieldValueValidatorProvider.get ()
+				integerFormFieldValueValidatorProvider.provide (
+					taskLogger)
 
 				.label (
 					label)
@@ -275,7 +276,8 @@ class CurrencyFormFieldBuilder
 			// constraint validator
 
 			FormFieldConstraintValidator constraintValidator =
-				nullFormFieldValueConstraintValidatorProvider.get ();
+				nullFormFieldValueConstraintValidatorProvider.provide (
+					taskLogger);
 
 			// interface mapping
 
@@ -284,34 +286,43 @@ class CurrencyFormFieldBuilder
 			if (range) {
 
 				interfaceMapping =
-					rangeFormFieldInterfaceMappingProvider.get ()
+					rangeFormFieldInterfaceMappingProvider.provide (
+						taskLogger)
 
 					.itemMapping (
-						currencyFormFieldInterfaceMappingProvider.get ()
+						currencyFormFieldInterfaceMappingProvider.provide (
+							taskLogger)
 
 						.currencyPath (
 							spec.currencyPath ())
 
 						.blankIfZero (
-							blankIfZero));
+							blankIfZero)
+					)
+
+				;
 
 			} else {
 
 				interfaceMapping =
-					currencyFormFieldInterfaceMappingProvider.get ()
+					currencyFormFieldInterfaceMappingProvider.provide (
+						taskLogger)
 
 					.currencyPath (
 						spec.currencyPath ())
 
 					.blankIfZero (
-						blankIfZero);
+						blankIfZero)
+
+				;
 
 			}
 
 			// renderer
 
 			FormFieldRenderer renderer =
-				textFormFieldRendererProvider.get ()
+				textFormFieldRendererProvider.provide (
+					taskLogger)
 
 				.name (
 					name)
@@ -325,12 +336,15 @@ class CurrencyFormFieldBuilder
 						false))
 
 				.listAlign (
-					FormField.Align.right);
+					FormField.Align.right)
+
+			;
 
 			// update hook
 
 			FormFieldUpdateHook updateHook =
 				formFieldPluginManager.getUpdateHook (
+					taskLogger,
 					context,
 					context.containerClass (),
 					name);
@@ -340,7 +354,8 @@ class CurrencyFormFieldBuilder
 			if (! readOnly) {
 
 				formFieldSet.addFormItem (
-					updatableFormFieldProvider.get ()
+					updatableFormFieldProvider.provide (
+						taskLogger)
 
 					.name (
 						name)
@@ -377,7 +392,8 @@ class CurrencyFormFieldBuilder
 			} else {
 
 				formFieldSet.addFormItem (
-					readOnlyFormFieldProvider.get ()
+					readOnlyFormFieldProvider.provide (
+						taskLogger)
 
 					.name (
 						name)

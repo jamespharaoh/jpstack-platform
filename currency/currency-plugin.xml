@@ -11,6 +11,10 @@
 		<model name="currency"/>
 	</models>
 
+	<layer name="fixture">
+		<component class="fixture.CurrencyFixtureMappingPlugin"/>
+	</layer>
+
 	<layer name="logic">
 		<component class="logic.CurrencyLogicImplementation"/>
 	</layer>

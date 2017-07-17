@@ -63,12 +63,6 @@ class ObjectCreatePageSpec
 	String createUserFieldName;
 
 	@DataAttribute
-	String createPrivDelegate;
-
-	@DataAttribute
-	String createPrivCode;
-
-	@DataAttribute
 	String privKey;
 
 }

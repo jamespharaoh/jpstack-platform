@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Provider;
-
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Setter;
@@ -48,7 +46,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
-import wbs.framework.database.BorrowedTransaction;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
@@ -96,7 +94,7 @@ class QueueSubjectSorter {
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <UserPrivCheckerBuilder> userPrivCheckerBuilderProvider;
+	ComponentProvider <UserPrivCheckerBuilder> userPrivCheckerBuilderProvider;
 
 	// inputs
 
@@ -116,8 +114,6 @@ class QueueSubjectSorter {
 
 	UserPrivChecker loggedInUserPrivChecker;
 	UserPrivChecker effectiveUserPrivChecker;
-
-	BorrowedTransaction transaction;
 
 	Set <SubjectInfo> subjectInfos =
 		new HashSet<> ();
@@ -144,13 +140,16 @@ class QueueSubjectSorter {
 		) {
 
 			loggedInUserPrivChecker =
-				userPrivCheckerBuilderProvider.get ()
+				userPrivCheckerBuilderProvider.provide (
+					transaction)
 
 				.userId (
 					loggedInUser.getId ())
 
 				.build (
-					transaction);
+					transaction)
+
+			;
 
 			if (
 				isNotNull (
@@ -158,13 +157,16 @@ class QueueSubjectSorter {
 			) {
 
 				effectiveUserPrivChecker =
-					userPrivCheckerBuilderProvider.get ()
+					userPrivCheckerBuilderProvider.provide (
+						transaction)
 
 					.userId (
 						effectiveUser.getId ())
 
 					.build (
-						transaction);
+						transaction)
+
+				;
 
 			}
 
@@ -421,7 +423,8 @@ class QueueSubjectSorter {
 			if (subjectInfo.preferred) {
 
 				UserPrivChecker preferredUserPrivChecker =
-					userPrivCheckerBuilderProvider.get ()
+					userPrivCheckerBuilderProvider.provide (
+						transaction)
 
 					.userId (
 						subjectInfo.preferredUser.getId ())

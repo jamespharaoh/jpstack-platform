@@ -181,6 +181,7 @@ class ObjectSearchPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -388,7 +389,7 @@ class ObjectSearchPageBuilder <
 
 				consoleHelper =
 					genericCastUnchecked (
-						objectManager.findConsoleHelperRequired (
+						objectManager.consoleHelperForNameRequired (
 							spec.objectTypeName ()));
 
 			} else {

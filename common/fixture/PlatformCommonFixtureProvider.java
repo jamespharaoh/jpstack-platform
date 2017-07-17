@@ -5,6 +5,7 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
@@ -33,6 +34,9 @@ class PlatformCommonFixtureProvider
 
 	@SingletonDependency
 	SliceObjectHelper sliceHelper;
+
+	@SingletonDependency
+	WbsConfig wbsConfig;
 
 	// implementation
 
@@ -81,7 +85,7 @@ class PlatformCommonFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"panel")
@@ -108,7 +112,7 @@ class PlatformCommonFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"system")
@@ -135,7 +139,7 @@ class PlatformCommonFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"internal")
@@ -181,7 +185,7 @@ class PlatformCommonFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"system"))
 
 				.setCode (
@@ -212,7 +216,7 @@ class PlatformCommonFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"system"))
 
 				.setCode (

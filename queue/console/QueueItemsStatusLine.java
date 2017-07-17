@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Future;
 
-import javax.inject.Provider;
-
 import com.google.gson.JsonObject;
 
 import lombok.Data;
@@ -29,9 +27,11 @@ import wbs.framework.component.annotations.NormalLifecycleTeardown;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.tools.EasyReadWriteLock;
 import wbs.framework.component.tools.EasyReadWriteLock.HeldLock;
 import wbs.framework.database.Database;
+import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.logging.LogContext;
@@ -72,13 +72,14 @@ class QueueItemsStatusLine
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <MasterQueueCache> masterQueueCacheProvider;
+	ComponentProvider <MasterQueueCache> masterQueueCacheProvider;
 
 	@PrototypeDependency
-	Provider <QueueItemsStatusLinePart> queueItemsStatusLinePart;
+	ComponentProvider <QueueItemsStatusLinePart>
+		queueItemsStatusLinePartProvider;
 
 	@PrototypeDependency
-	Provider <QueueSubjectSorter> queueSubjectSorterProvider;
+	ComponentProvider <QueueSubjectSorter> queueSubjectSorterProvider;
 
 	// state
 
@@ -109,7 +110,19 @@ class QueueItemsStatusLine
 	PagePart createPagePart (
 			@NonNull Transaction parentTransaction) {
 
-		return queueItemsStatusLinePart.get ();
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"createPagePart");
+
+		) {
+
+			return queueItemsStatusLinePartProvider.provide (
+				transaction);
+
+		}
 
 	}
 
@@ -318,7 +331,8 @@ class QueueItemsStatusLine
 			// create cache
 
 			QueueCache queueCache =
-				masterQueueCacheProvider.get ()
+				masterQueueCacheProvider.provide (
+					transaction)
 
 				.setup (
 					transaction);
@@ -334,7 +348,8 @@ class QueueItemsStatusLine
 						userData.userId ());
 
 				SortedQueueSubjects sortedSubjects =
-					queueSubjectSorterProvider.get ()
+					queueSubjectSorterProvider.provide (
+						transaction)
 
 					.queueCache (
 						queueCache)
@@ -346,7 +361,9 @@ class QueueItemsStatusLine
 						user)
 
 					.sort (
-						transaction);
+						transaction)
+
+				;
 
 				synchronized (userData) {
 
@@ -356,7 +373,9 @@ class QueueItemsStatusLine
 							sortedSubjects.totalAvailableItems ())
 
 						.userClaimedItems (
-							sortedSubjects.userClaimedItems ());
+							sortedSubjects.userClaimedItems ())
+
+					;
 
 				}
 

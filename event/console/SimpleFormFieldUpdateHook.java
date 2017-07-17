@@ -1,5 +1,7 @@
 package wbs.platform.event.console;
 
+import static wbs.utils.etc.OptionalUtils.optionalOr;
+
 import com.google.common.base.Optional;
 
 import lombok.Getter;
@@ -72,6 +74,13 @@ class SimpleFormFieldUpdateHook <Container extends Record <?>, Generic, Native>
 
 		) {
 
+			// determine actual field name
+
+			String updatedFieldName =
+				optionalOr (
+					updateResult.updatedFieldName (),
+					fieldName);
+
 			// determine if it's an admin event
 
 			// TODO this needs to be much better
@@ -111,7 +120,7 @@ class SimpleFormFieldUpdateHook <Container extends Record <?>, Generic, Native>
 						adminPrefix + "object_field_updated_in",
 						userConsoleLogic.userRequired (
 							transaction),
-						fieldName,
+						updatedFieldName,
 						objectRef.get (),
 						objectType.get (),
 						linkObject,
@@ -124,7 +133,7 @@ class SimpleFormFieldUpdateHook <Container extends Record <?>, Generic, Native>
 						adminPrefix + "object_field_nulled_in",
 						userConsoleLogic.userRequired (
 							transaction),
-						fieldName,
+						updatedFieldName,
 						objectRef.get (),
 						objectType.get (),
 						linkObject);
@@ -140,7 +149,7 @@ class SimpleFormFieldUpdateHook <Container extends Record <?>, Generic, Native>
 						adminPrefix + "object_field_updated",
 						userConsoleLogic.userRequired (
 							transaction),
-						fieldName,
+						updatedFieldName,
 						linkObject,
 						updateResult.newNativeValue ().get ());
 
@@ -151,7 +160,7 @@ class SimpleFormFieldUpdateHook <Container extends Record <?>, Generic, Native>
 						adminPrefix + "object_field_nulled",
 						userConsoleLogic.userRequired (
 							transaction),
-						fieldName,
+						updatedFieldName,
 						linkObject);
 
 				}

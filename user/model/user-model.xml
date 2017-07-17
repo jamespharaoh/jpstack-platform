@@ -96,6 +96,16 @@
 			text="%0 reset password for %1"
 			admin="yes"/>
 
+		<event-type
+			name="User grant by fixture"
+			text="Fixture provider %0 granted %1 to %2"
+			admin="yes"/>
+
+		<event-type
+			name="User password set by fixture"
+			text="Fixture provider %0 set password for %1"
+			admin="yes"/>
+
 	</event-types>
 
 </model-meta>

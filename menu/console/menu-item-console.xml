@@ -2,7 +2,9 @@
 	name="menu-item">
 
 	<console-helper-provider
-		object-name="menuItem">
+		object-name="menuItem"
+		create-priv="parent:manage"
+		view-priv="view">
 
 		<context-stuff
 			name="menuItemName"
@@ -14,7 +16,7 @@
 
 		<priv-key
 			name="menuItem.manage"
-			priv="parent:manage"/>
+			priv="grandparent:manage"/>
 
 		<run-post-processor
 			name="menuGroup"/>
@@ -31,9 +33,7 @@
 				form="list"/>
 
 			<object-create-page
-				form="create"
-				create-priv-delegate="parent"
-				create-priv-code="manage"/>
+				form="create"/>
 
 		</list>
 
@@ -133,10 +133,7 @@
 
 			<columns>
 
-				<parent-field
-					create-priv-delegate="root"
-					create-priv-code="manage"/>
-
+				<parent-field/>
 				<name-field/>
 				<description-field/>
 				<deleted-field/>

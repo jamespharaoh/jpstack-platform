@@ -2,8 +2,6 @@ package wbs.platform.object.summary;
 
 import static wbs.utils.etc.Misc.todo;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.module.ConsoleModuleBuilderComponent;
@@ -15,7 +13,6 @@ import wbs.framework.builder.annotations.BuilderSource;
 import wbs.framework.builder.annotations.BuilderTarget;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
-import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -32,12 +29,6 @@ class ObjectSummaryFieldsBuilder <
 
 	@ClassSingletonDependency
 	LogContext logContext;
-
-	// prototype dependencies
-
-	@PrototypeDependency
-	Provider <ObjectSummaryFieldsPart <ObjectType, ParentType>>
-	summaryFieldsPartProvider;
 
 	// builder
 

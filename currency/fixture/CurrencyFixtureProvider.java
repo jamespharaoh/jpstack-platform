@@ -5,6 +5,7 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
@@ -38,6 +39,9 @@ class CurrencyFixtureProvider
 	@SingletonDependency
 	SliceObjectHelper sliceHelper;
 
+	@SingletonDependency
+	WbsConfig wbsConfig;
+
 	// implementation
 
 	@Override
@@ -62,7 +66,7 @@ class CurrencyFixtureProvider
 					menuGroupHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test",
+						wbsConfig.defaultSlice (),
 						"system"))
 
 				.setCode (
@@ -93,7 +97,7 @@ class CurrencyFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"gbp")
@@ -126,7 +130,7 @@ class CurrencyFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"usd")
@@ -159,7 +163,7 @@ class CurrencyFixtureProvider
 					sliceHelper.findByCodeRequired (
 						transaction,
 						GlobalId.root,
-						"test"))
+						wbsConfig.defaultSlice ()))
 
 				.setCode (
 					"credit")

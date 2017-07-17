@@ -4,8 +4,6 @@ import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.context.ConsoleContextBuilderContainer;
@@ -19,7 +17,6 @@ import wbs.console.module.ConsoleModuleBuilderComponent;
 import wbs.console.module.ConsoleModuleImplementation;
 import wbs.console.responder.ConsoleFile;
 import wbs.console.tab.ConsoleContextTab;
-import wbs.console.tab.TabContextResponder;
 
 import wbs.framework.builder.Builder;
 import wbs.framework.builder.annotations.BuildMethod;
@@ -31,6 +28,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.manager.ComponentManager;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -64,13 +62,10 @@ class ObjectListPageBuilder <
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <ConsoleFile> consoleFile;
+	ComponentProvider <ConsoleFile> consoleFileProvider;
 
 	@PrototypeDependency
-	Provider <ConsoleContextTab> contextTab;
-
-	@PrototypeDependency
-	Provider <TabContextResponder> tabContextResponder;
+	ComponentProvider <ConsoleContextTab> contextTabProvider;
 
 	// builder
 
@@ -122,6 +117,7 @@ class ObjectListPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -156,7 +152,10 @@ class ObjectListPageBuilder <
 				taskLogger,
 				container.tabLocation (),
 
-				contextTab.get ()
+				contextTabProvider.provide (
+					taskLogger,
+					contextTab ->
+						contextTab
 
 					.name (
 						container.pathPrefix () + ".list")
@@ -165,8 +164,9 @@ class ObjectListPageBuilder <
 						"List")
 
 					.localFile (
-						container.pathPrefix () + ".list"),
+						container.pathPrefix () + ".list")
 
+				),
 				extensionPoint.contextTypeNames ());
 
 		}
@@ -188,16 +188,19 @@ class ObjectListPageBuilder <
 
 			consoleModule.addContextFile (
 				container.pathPrefix () + ".list",
-				consoleFile.get ()
+				consoleFileProvider.provide (
+					taskLogger,
+					consoleFile ->
+						consoleFile
 
 					.getResponderName (
 						taskLogger,
 						stringFormat (
 							"%sListResponder",
-							container.newBeanNamePrefix ())),
+							container.newBeanNamePrefix ()))
 
-				extensionPoint.contextTypeNames ()
-			);
+				),
+				extensionPoint.contextTypeNames ());
 
 		}
 

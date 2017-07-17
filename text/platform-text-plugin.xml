@@ -10,10 +10,6 @@
 		<model name="text"/>
 	</models>
 
-	<layer name="web">
-		<component class="web.TextResponder"/>
-	</layer>
-
 	<layer name="console">
 		<component class="console.TextConsoleHooks"/>
 		<component class="console.TextCryptor"/>

@@ -140,6 +140,7 @@ class ObjectLinksPageBuilder <
 			for (
 				ResolvedConsoleContextExtensionPoint resolvedExtensionPoint
 					: consoleMetaManager.resolveExtensionPoint (
+						taskLogger,
 						container.extensionPointName ())
 			) {
 
@@ -380,7 +381,7 @@ class ObjectLinksPageBuilder <
 					spec.linksFieldName ());
 
 			targetConsoleHelper =
-				objectManager.findConsoleHelperRequired (
+				objectManager.consoleHelperForClassRequired (
 					(Class <?>)
 					linksField.collectionValueType ());
 

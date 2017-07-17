@@ -2,8 +2,6 @@ package wbs.platform.text.logic;
 
 import static wbs.utils.etc.OptionalUtils.optionalFromNullable;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
@@ -11,6 +9,7 @@ import wbs.framework.component.annotations.LateLifecycleSetup;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.annotations.WeakSingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.CloseableTransaction;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
@@ -47,7 +46,7 @@ class TextObjectHelperMethodsImplementation
 	// prototype dependencies
 
 	@PrototypeDependency
-	Provider <IdCacheBuilder <
+	ComponentProvider <IdCacheBuilder <
 		CloseableTransaction,
 		String,
 		Long,
@@ -77,7 +76,8 @@ class TextObjectHelperMethodsImplementation
 			// from and to user id
 
 			textCache =
-				textCacheBuilderProvider.get ()
+				textCacheBuilderProvider.provide (
+					taskLogger)
 
 				.lookupByIdFunction (
 					textHelper::find)
@@ -99,7 +99,9 @@ class TextObjectHelperMethodsImplementation
 					CloseableTransaction::genericWrapper)
 
 				.build (
-					taskLogger);
+					taskLogger)
+
+			;
 
 		}
 

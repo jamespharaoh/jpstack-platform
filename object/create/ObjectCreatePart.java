@@ -8,7 +8,6 @@ import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.web.utils.HtmlBlockUtils.htmlParagraphWriteFormat;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +20,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import wbs.console.forms.core.ConsoleForm;
+import wbs.console.forms.core.ConsoleFormHintsLogic;
 import wbs.console.forms.core.ConsoleFormType;
 import wbs.console.helper.core.ConsoleHelper;
 import wbs.console.helper.manager.ConsoleObjectManager;
@@ -34,7 +34,6 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.entity.record.GlobalId;
 import wbs.framework.entity.record.Record;
 import wbs.framework.logging.LogContext;
 
@@ -52,6 +51,9 @@ class ObjectCreatePart <
 	extends AbstractPagePart {
 
 	// singleton dependencies
+
+	@SingletonDependency
+	ConsoleFormHintsLogic consoleFormHintsLogic;
 
 	@ClassSingletonDependency
 	LogContext logContext;
@@ -77,18 +79,13 @@ class ObjectCreatePart <
 	ConsoleFormType <ObjectType> formType;
 
 	@Getter @Setter
-	String parentPrivCode;
-
-	@Getter @Setter
 	String localFile;
 
 	// state
 
-	ConsoleHelper <ParentType> parentHelper;
-	List <ParentType> parents;
+	//List <ParentType> parents;
 
 	ParentType parent;
-	Record <?> grandparent;
 
 	Map <String, Object> formHints;
 	ConsoleForm <ObjectType> form;
@@ -184,8 +181,8 @@ class ObjectCreatePart <
 
 		) {
 
-			parentHelper =
-				objectManager.findConsoleHelperRequired (
+			ConsoleHelper <ParentType> parentHelper =
+				objectManager.consoleHelperForClassRequired (
 					consoleHelper.parentClassRequired ());
 
 			if (parentHelper.isRoot ()) {
@@ -217,45 +214,6 @@ class ObjectCreatePart <
 						optionalGetRequired (
 							parentIdOptional));
 
-				return;
-
-			}
-
-			ConsoleHelper <?> grandParentHelper =
-				objectManager.findConsoleHelperRequired (
-					parentHelper.parentClassRequired ());
-
-			Optional <Long> grandParentIdOptional =
-				requestContext.stuffInteger (
-					grandParentHelper.idKey ());
-
-			if (
-				optionalIsPresent (
-					grandParentIdOptional)
-			) {
-
-				parents =
-					parentHelper.findByParent (
-						transaction,
-						new GlobalId (
-							grandParentHelper.objectTypeId (),
-							optionalGetRequired (
-								grandParentIdOptional)));
-
-				grandparent =
-					grandParentHelper.findRequired (
-						transaction,
-						optionalGetRequired (
-							grandParentIdOptional));
-
-			} else {
-
-				// show all parents
-
-				parents =
-					parentHelper.findAll (
-						transaction);
-
 			}
 
 		}
@@ -278,46 +236,10 @@ class ObjectCreatePart <
 			ImmutableMap.Builder <String, Object> formHintsBuilder =
 				ImmutableMap.builder ();
 
-			if (
-				isNotNull (
-					parent)
-			) {
-
-				formHintsBuilder.put (
-					"parent",
-					parent);
-
-			}
-
-			if (
-				isNotNull (
-					grandparent)
-			) {
-
-				formHintsBuilder.put (
-					"grandparent",
-					grandparent);
-
-				formHintsBuilder.put (
-					stringFormat (
-						"%s.parent",
-						consoleHelper.parentFieldName ()),
-					grandparent);
-
-				formHintsBuilder.put (
-					stringFormat (
-						"parent.%s",
-						parentHelper.parentFieldName ()),
-					grandparent);
-
-				formHintsBuilder.put (
-					stringFormat (
-						"%s.%s",
-						consoleHelper.parentFieldName (),
-						parentHelper.parentFieldName ()),
-					grandparent);
-
-			}
+			consoleFormHintsLogic.prepareParentHints (
+				transaction,
+				formHintsBuilder,
+				consoleHelper);
 
 			formHints =
 				formHintsBuilder.build ();

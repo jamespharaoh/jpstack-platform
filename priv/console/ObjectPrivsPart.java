@@ -7,6 +7,7 @@ import static wbs.utils.collection.IterableUtils.iterableMapToSet;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.web.utils.HtmlTableUtils.htmlTableCellWrite;
 import static wbs.web.utils.HtmlTableUtils.htmlTableCellWriteHtml;
 import static wbs.web.utils.HtmlTableUtils.htmlTableClose;
@@ -162,8 +163,9 @@ class ObjectPrivsPart <
 						currentObjectLoop);
 
 				ConsoleHelper <?> currentObjectHelper =
-					objectManager.findConsoleHelperRequired (
-						currentObject);
+					objectManager.consoleHelperForObjectRequired (
+						genericCastUnchecked (
+							currentObject));
 
 				ObjectTypeRec currentObjectType =
 					objectTypeHelper.findRequired (
@@ -174,12 +176,12 @@ class ObjectPrivsPart <
 					iterableMapToList (
 						listSorted (
 							iterableFilter (
-								priv ->
-									privCodes.contains (
-										priv.getCode ()),
 								privHelper.findByParent (
 									transaction,
-									currentObject))),
+									currentObject),
+								priv ->
+									privCodes.contains (
+										priv.getCode ()))),
 						priv ->
 							preparePrivData (
 								transaction,
@@ -225,10 +227,10 @@ class ObjectPrivsPart <
 				.users (
 					iterableMapToList (
 						iterableFilter (
-							UserPrivRec::getCan,
 							userPrivHelper.find (
 								transaction,
-								priv)),
+								priv),
+							UserPrivRec::getCan),
 						UserPrivRec::getUser))
 
 				.groups (

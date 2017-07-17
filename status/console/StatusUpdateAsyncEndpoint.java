@@ -1,13 +1,12 @@
 package wbs.platform.status.console;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
-import wbs.framework.component.annotations.UninitializedDependency;
+import wbs.framework.component.annotations.StrongPrototypeDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.component.tools.ComponentFactory;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -28,11 +27,11 @@ class StatusUpdateAsyncEndpoint
 	@SingletonDependency
 	StatusUpdateAsyncHelper statusUpdateAsyncHelper;
 
-	// unitialized dependencies
+	// prototype dependencies
 
-	@UninitializedDependency
-	Provider <ConsoleAsyncSubscription <Object>>
-	consoleAsyncSubscriptionProvider;
+	@StrongPrototypeDependency
+	ComponentProvider <ConsoleAsyncSubscription <Object>>
+		consoleAsyncSubscriptionProvider;
 
 	// implementation
 
@@ -50,12 +49,15 @@ class StatusUpdateAsyncEndpoint
 
 		) {
 
-			return consoleAsyncSubscriptionProvider.get ()
+			return consoleAsyncSubscriptionProvider.provide (
+				taskLogger,
+				consoleAsyncSubscription ->
+					consoleAsyncSubscription
 
 				.helper (
 					statusUpdateAsyncHelper)
 
-			;
+			);
 
 		}
 

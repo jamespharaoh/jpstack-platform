@@ -3,8 +3,6 @@ package wbs.platform.core.console;
 import static wbs.utils.string.StringUtils.stringStartsWithSimple;
 import static wbs.utils.string.StringUtils.substringFrom;
 
-import javax.inject.Provider;
-
 import lombok.NonNull;
 
 import wbs.console.action.ConsoleAction;
@@ -15,12 +13,14 @@ import wbs.framework.component.annotations.NamedDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.Database;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.GlobalId;
 import wbs.framework.logging.LogContext;
+import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.platform.deployment.console.ApiDeploymentConsoleHelper;
@@ -69,7 +69,7 @@ class CoreSystemRestartAction
 
 	@PrototypeDependency
 	@NamedDependency ("coreSystemRestartResponder")
-	Provider <WebResponder> restartResponderProvider;
+	ComponentProvider <WebResponder> restartResponderProvider;
 
 	// details
 
@@ -78,7 +78,19 @@ class CoreSystemRestartAction
 	WebResponder backupResponder (
 			@NonNull TaskLogger parentTaskLogger) {
 
-		return restartResponderProvider.get ();
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"backupResponder");
+
+		) {
+
+			return restartResponderProvider.provide (
+				taskLogger);
+
+		}
 
 	}
 
