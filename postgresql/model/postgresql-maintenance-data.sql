@@ -6,3 +6,9 @@ SELECT postgresql_maintenance_insert (
 	'1',
 	0,
 	'SELECT message_stats_update_log_process ()');
+
+SELECT postgresql_maintenance_insert (
+	'1',
+	0,
+	'SELECT sms_number_message_stats_update_log_process ()');
+	
