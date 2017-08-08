@@ -1,0 +1,13 @@
+<record
+	name="lock"
+	type="common">
+
+	<fields>
+
+		<!-- id -->
+
+		<assigned-id-field/>
+
+	</fields>
+
+</record>

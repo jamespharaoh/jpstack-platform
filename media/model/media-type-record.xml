@@ -1,0 +1,27 @@
+<record
+	name="mediaType"
+	type="major">
+
+	<fields>
+
+		<!-- id -->
+
+		<generated-id-field/>
+
+		<!-- identity -->
+
+		<code-field
+			name="mimeType"/>
+
+		<!-- details -->
+
+		<description-field/>
+
+		<!-- data -->
+
+		<string-field
+			name="extension"/>
+
+	</fields>
+
+</record>

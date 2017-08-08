@@ -1,0 +1,22 @@
+<record
+	name="loggingStaticContext"
+	type="major">
+
+	<fields>
+
+		<!-- id -->
+
+		<generated-id-field/>
+
+		<!-- identity -->
+
+		<code-field
+			cacheable="yes"/>
+
+		<!-- details -->
+
+		<name-field/>
+
+	</fields>
+
+</record>
