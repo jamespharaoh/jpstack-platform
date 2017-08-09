@@ -1,0 +1,16 @@
+<plugin
+	name="object-link"
+	package="wbs.platform.object.link">
+
+	<layer name="console">
+
+		<bootstrap-component class="ObjectLinksPageComponentBuilder"/>
+		<bootstrap-component class="ObjectLinksPageSpec"/>
+
+		<component class="ObjectLinksAction"/>
+		<component class="ObjectLinksPart"/>
+		<component class="ObjectLinksPageBuilder"/>
+
+	</layer>
+
+</plugin>

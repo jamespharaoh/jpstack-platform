@@ -1,0 +1,18 @@
+<record
+	name="text"
+	type="common">
+
+	<fields>
+
+		<!-- id -->
+
+		<generated-id-field/>
+
+		<!-- identity -->
+
+		<identity-string-field
+			name="text"/>
+
+	</fields>
+
+</record>
