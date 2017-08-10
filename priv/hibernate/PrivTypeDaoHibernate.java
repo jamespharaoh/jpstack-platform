@@ -7,7 +7,7 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.priv.model.PrivTypeDao;
@@ -15,7 +15,7 @@ import wbs.platform.priv.model.PrivTypeRec;
 
 public
 class PrivTypeDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements PrivTypeDao {
 
 	// singleton dependencies

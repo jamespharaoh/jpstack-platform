@@ -10,7 +10,7 @@ import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.queue.model.QueueRec;
@@ -19,7 +19,7 @@ import wbs.platform.queue.model.QueueSubjectRec;
 
 public
 class QueueSubjectDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements QueueSubjectDaoMethods {
 
 	// singleton dependencies

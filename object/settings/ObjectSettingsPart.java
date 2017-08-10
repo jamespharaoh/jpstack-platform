@@ -245,6 +245,10 @@ class ObjectSettingsPart <
 						localName),
 					enctype);
 
+				renderButtons (
+					transaction,
+					formatWriter);
+
 			}
 
 			htmlTableOpenDetails (
@@ -259,16 +263,8 @@ class ObjectSettingsPart <
 
 			if (canEdit) {
 
-				htmlParagraphOpen (
-					formatWriter);
-
-				formatWriter.writeLineFormat (
-					"<input",
-					" type=\"submit\"",
-					" value=\"save changes\"",
-					">");
-
-				htmlParagraphClose (
+				renderButtons (
+					transaction,
 					formatWriter);
 
 				htmlFormClose (
@@ -319,6 +315,38 @@ class ObjectSettingsPart <
 
 			errorsPart.renderHtmlHeadContent (
 				transaction,
+				formatWriter);
+
+		}
+
+	}
+
+	// private implementation
+
+	private
+	void renderButtons (
+			@NonNull Transaction parentTransaction,
+			@NonNull FormatWriter formatWriter) {
+
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"renderButtons");
+
+		) {
+
+			htmlParagraphOpen (
+				formatWriter);
+
+			formatWriter.writeLineFormat (
+				"<input",
+				" type=\"submit\"",
+				" value=\"save changes\"",
+				">");
+
+			htmlParagraphClose (
 				formatWriter);
 
 		}

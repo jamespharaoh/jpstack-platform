@@ -1,8 +1,11 @@
 package wbs.platform.media.console;
 
 import static wbs.utils.etc.Misc.doNothing;
+import static wbs.utils.etc.Misc.shouldNeverHappen;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.NumberUtils.moreThanZero;
+import static wbs.utils.etc.NumberUtils.parseIntegerRequired;
+import static wbs.utils.etc.OptionalUtils.optionalMapRequiredOrDefault;
 import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.etc.ResultUtils.successResult;
 import static wbs.utils.string.StringUtils.stringFormat;
@@ -59,6 +62,9 @@ class ImageFormFieldRenderer <Container>
 	MediaConsoleLogic mediaConsoleLogic;
 
 	@SingletonDependency
+	MediaConsoleHelper mediaHelper;
+
+	@SingletonDependency
 	MediaLogic mediaLogic;
 
 	// properties
@@ -105,7 +111,7 @@ class ImageFormFieldRenderer <Container>
 			@NonNull FormatWriter htmlWriter,
 			@NonNull Container container,
 			@NonNull Map <String, Object> hints,
-			@NonNull Optional <MediaRec> interfaceValue,
+			@NonNull Optional <MediaRec> interfaceValueOptional,
 			@NonNull FormType formType,
 			@NonNull String formName) {
 
@@ -118,14 +124,29 @@ class ImageFormFieldRenderer <Container>
 
 		) {
 
-			if (interfaceValue.isPresent ()) {
+			htmlWriter.writeLineFormat (
+				"<input",
+				" type=\"hidden\"",
+				" name=\"%h.%h:id\"",
+				formName,
+				name (),
+				" value=\"%h\"",
+				optionalMapRequiredOrDefault (
+					interfaceValue ->
+						integerToDecimalString (
+							interfaceValue.getId ()),
+					interfaceValueOptional,
+					""),
+				"/>");
+
+			if (interfaceValueOptional.isPresent ()) {
 
 				renderHtmlComplex (
 					transaction,
 					htmlWriter,
 					container,
 					hints,
-					interfaceValue);
+					interfaceValueOptional);
 
 				htmlWriter.writeFormat (
 					"<br>\n");
@@ -141,7 +162,7 @@ class ImageFormFieldRenderer <Container>
 				"><br>\n");
 
 			if (
-				interfaceValue.isPresent ()
+				interfaceValueOptional.isPresent ()
 				&& nullable ()
 			) {
 
@@ -208,6 +229,14 @@ class ImageFormFieldRenderer <Container>
 
 		) || (
 
+			submission.hasParameter (
+				stringFormat (
+					"%s.%s:id",
+					formName,
+					name ()))
+
+		) || (
+
 			submission.multipart ()
 
 			&& submission.hasFileItem (
@@ -249,32 +278,77 @@ class ImageFormFieldRenderer <Container>
 						formName,
 						name ()))
 			) {
-				return null;
-			}
 
-			FileItem fileItem =
-				submission.fileItem (
+				return null;
+
+			} else if (
+
+				submission.multipart ()
+
+				&& submission.hasFileItem (
 					stringFormat (
 						"%s.%s",
 						formName,
-						name ()));
+						name ()))
 
-			try {
+				&& moreThanZero (
+					submission.fileItem (
+						stringFormat (
+							"%s.%s",
+							formName,
+							name ())
+					).getSize ())
 
-				byte[] data =
-					IOUtils.toByteArray (
-						fileItem.getInputStream ());
+			) {
 
-				return mediaLogic.createMediaFromImageRequired (
+				FileItem fileItem =
+					submission.fileItem (
+						stringFormat (
+							"%s.%s",
+							formName,
+							name ()));
+
+				try {
+
+					byte[] data =
+						IOUtils.toByteArray (
+							fileItem.getInputStream ());
+
+					return mediaLogic.createMediaFromImageRequired (
+						transaction,
+						data,
+						"image/jpeg",
+						fileItem.getName ());
+
+				} catch (IOException exception) {
+
+					throw new RuntimeIoException (
+						exception);
+
+				}
+
+			} else if (
+
+				submission.hasParameter (
+					stringFormat (
+						"%s.%s:id",
+						formName,
+						name ()))
+
+			) {
+
+				return mediaHelper.findRequired (
 					transaction,
-					data,
-					"image/jpeg",
-					fileItem.getName ());
+					parseIntegerRequired (
+						submission.parameter (
+							stringFormat (
+								"%s.%s:id",
+								formName,
+								name ()))));
 
-			} catch (IOException exception) {
+			} else {
 
-				throw new RuntimeIoException (
-					exception);
+				throw shouldNeverHappen ();
 
 			}
 

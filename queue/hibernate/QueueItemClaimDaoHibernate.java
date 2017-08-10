@@ -9,7 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.queue.model.QueueItemClaimDaoMethods;
@@ -19,7 +19,7 @@ import wbs.platform.user.model.UserRec;
 
 public
 class QueueItemClaimDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements QueueItemClaimDaoMethods {
 
 	// singleton dependencies
