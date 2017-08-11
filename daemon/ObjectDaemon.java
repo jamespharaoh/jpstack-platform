@@ -20,6 +20,7 @@ interface ObjectDaemon <IdType> {
 
 	void processObject (
 			TaskLogger parentTaskLogger,
-			IdType id);
+			IdType id)
+		throws InterruptedException;
 
 }
