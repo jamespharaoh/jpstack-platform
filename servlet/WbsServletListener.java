@@ -550,10 +550,9 @@ class WbsServletListener
 
 		Instant restartTime =
 			Instant.now ().plus (
-				restartFrequency.getMillis ()
-				- restartFrequencyDeviation.getMillis ()
-				+ randomLogic.randomInteger (
-					restartFrequencyDeviation.getMillis () * 2));
+				randomLogic.randomDuration (
+				restartFrequency,
+				restartFrequencyDeviation));
 
 		while (
 			earlierThan (
@@ -635,11 +634,11 @@ class WbsServletListener
 	public final static
 	Duration restartFrequency =
 		Duration.standardHours (
-			1l);
+			4l);
 
 	public final static
 	Duration restartFrequencyDeviation =
 		Duration.standardMinutes (
-			15l);
+			30l);
 
 }

@@ -5,6 +5,7 @@ import static wbs.utils.etc.Misc.shouldNeverHappen;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.NumberUtils.moreThanZero;
 import static wbs.utils.etc.NumberUtils.parseIntegerRequired;
+import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.OptionalUtils.optionalMapRequiredOrDefault;
 import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.etc.ResultUtils.successResult;
@@ -124,20 +125,27 @@ class ImageFormFieldRenderer <Container>
 
 		) {
 
-			htmlWriter.writeLineFormat (
-				"<input",
-				" type=\"hidden\"",
-				" name=\"%h.%h:id\"",
-				formName,
-				name (),
-				" value=\"%h\"",
-				optionalMapRequiredOrDefault (
-					interfaceValue ->
-						integerToDecimalString (
-							interfaceValue.getId ()),
-					interfaceValueOptional,
-					""),
-				"/>");
+			if (
+				optionalIsPresent (
+					interfaceValueOptional)
+			) {
+
+				htmlWriter.writeLineFormat (
+					"<input",
+					" type=\"hidden\"",
+					" name=\"%h.%h:id\"",
+					formName,
+					name (),
+					" value=\"%h\"",
+					optionalMapRequiredOrDefault (
+						interfaceValue ->
+							integerToDecimalString (
+								interfaceValue.getId ()),
+						interfaceValueOptional,
+						""),
+					"/>");
+
+			}
 
 			if (interfaceValueOptional.isPresent ()) {
 
