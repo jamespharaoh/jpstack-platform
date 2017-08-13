@@ -1,5 +1,5 @@
 <record
-	name="exceptionLog"
+	name="exception-log"
 	type="event"
 	table="exception">
 
@@ -19,8 +19,7 @@
 		<!-- data -->
 
 		<type-field
-			name="type"
-			type="exceptionLogType"/>
+			name="type"/>
 
 		<reference-field
 			type="user"
@@ -44,7 +43,7 @@
 
 		<enum-field
 			name="resolution"
-			type="concreteExceptionResolution"/>
+			type="concrete-exception-resolution"/>
 
 	</fields>
 

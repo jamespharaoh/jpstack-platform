@@ -7,7 +7,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
-import wbs.framework.fixtures.FixtureProvider;
+import wbs.framework.fixtures.Fixture;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.TaskLogger;
 
@@ -18,7 +18,7 @@ import wbs.utils.random.RandomLogic;
 @PrototypeComponent ("rootFixtureProvider")
 public
 class RootFixtureProvider
-	implements FixtureProvider {
+	implements Fixture {
 
 	// singleton dependencies
 

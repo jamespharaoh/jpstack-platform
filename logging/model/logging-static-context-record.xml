@@ -1,5 +1,5 @@
 <record
-	name="loggingStaticContext"
+	name="logging-static-context"
 	type="major">
 
 	<fields>

@@ -1,5 +1,5 @@
 <record
-	name="eventType"
+	name="event-type"
 	type="type">
 
 	<fields>

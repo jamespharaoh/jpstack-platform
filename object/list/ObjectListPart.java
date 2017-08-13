@@ -331,7 +331,7 @@ class ObjectListPart <
 			Long objectId =
 				(Long)
 				requestContext.stuff (
-					consoleHelper.objectName () + "Id");
+					consoleHelper.objectTypeCamel () + "Id");
 
 			if (
 				isNotNull (
@@ -526,7 +526,7 @@ class ObjectListPart <
 						() -> new NullPointerException (
 							stringFormat (
 								"Can't find grand parent object %s with id %s",
-								grandParentHelper.objectName (),
+								grandParentHelper.objectTypeHyphen (),
 								integerToDecimalString (
 									grandParentId))));
 
@@ -553,7 +553,7 @@ class ObjectListPart <
 							"DAO method not found: %s.%s (%s, Interval)",
 							stringFormat (
 								"%sHelper",
-								consoleHelper.objectName ()),
+								consoleHelper.objectTypeCamel ()),
 							daoMethodName,
 							grandParentHelper.objectClass ().getSimpleName ()));
 

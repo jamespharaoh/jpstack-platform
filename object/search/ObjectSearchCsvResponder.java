@@ -9,7 +9,6 @@ import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.etc.ReflectionUtils.methodGetRequired;
 import static wbs.utils.etc.ReflectionUtils.methodInvoke;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
-import static wbs.utils.string.StringUtils.camelToHyphen;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringSplitComma;
 
@@ -188,8 +187,7 @@ class ObjectSearchCsvResponder <ResultType>
 				"Content-Disposition",
 				stringFormat (
 					"attachment;filename=%s-search.csv",
-					camelToHyphen (
-						consoleHelper.objectName ())));
+					consoleHelper.objectTypeHyphen ()));
 
 		}
 

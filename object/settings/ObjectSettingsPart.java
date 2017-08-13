@@ -216,7 +216,7 @@ class ObjectSettingsPart <
 				formatWriter,
 				"%s settings",
 				capitalise (
-					consoleHelper.friendlyName ()));
+					consoleHelper.friendlyNameSingular ()));
 
 			if (canEdit) {
 

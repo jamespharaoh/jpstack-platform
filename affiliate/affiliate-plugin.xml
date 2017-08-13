@@ -4,7 +4,7 @@
 
 	<models>
 		<model name="affiliate"/>
-		<model name="affiliateType"/>
+		<model name="affiliate-type"/>
 	</models>
 
 	<layer name="fixture">

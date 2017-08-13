@@ -32,10 +32,10 @@
 			name="prefix"/>
 
 		<string-field
-			name="singularSuffix"/>
+			name="singular-suffix"/>
 
 		<string-field
-			name="pluralSuffix"/>
+			name="plural-suffix"/>
 
 	</fields>
 

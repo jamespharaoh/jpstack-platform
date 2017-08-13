@@ -18,7 +18,7 @@ import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.entity.record.GlobalId;
-import wbs.framework.fixtures.FixtureProvider;
+import wbs.framework.fixtures.Fixture;
 import wbs.framework.fixtures.TestAccounts;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
@@ -39,7 +39,7 @@ import wbs.platform.user.model.UserRec;
 @PrototypeComponent ("userFixtureProvider")
 public
 class UserFixtureProvider
-	implements FixtureProvider {
+	implements Fixture {
 
 	// singleton dependencies
 

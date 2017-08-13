@@ -325,7 +325,7 @@ class ObjectCreatePageBuilder <
 			targetContextTypeName =
 				ifNull (
 					spec.targetContextTypeName (),
-					consoleHelper.objectName () + ":combo");
+					consoleHelper.objectTypeCamel () + ":combo");
 
 			targetResponderProvider =
 				componentManager.getComponentProviderRequired (
@@ -334,7 +334,7 @@ class ObjectCreatePageBuilder <
 						spec.targetResponderName (),
 						stringFormat (
 							"%sSettingsResponder",
-							consoleHelper.objectName ())),
+							consoleHelper.objectTypeCamel ())),
 					WebResponder.class);
 
 			createTimeFieldName =

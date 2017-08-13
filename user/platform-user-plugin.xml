@@ -8,10 +8,10 @@
 
 	<models>
 		<model name="user"/>
-		<model name="userData"/>
-		<model name="userOnline"/>
-		<model name="userPriv"/>
-		<model name="userSession"/>
+		<model name="user-data"/>
+		<model name="user-online"/>
+		<model name="user-priv"/>
+		<model name="user-session"/>
 	</models>
 
 	<layer name="console">

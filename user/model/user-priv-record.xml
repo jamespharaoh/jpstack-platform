@@ -1,5 +1,5 @@
 <record
-	name="userPriv"
+	name="user-priv"
 	type="ephemeral">
 
 	<fields>
@@ -23,7 +23,7 @@
 			default="no"/>
 
 		<yes-no-field
-			name="canGrant"
+			name="can-grant"
 			default="no"/>
 
 	</fields>

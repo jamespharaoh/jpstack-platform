@@ -12,11 +12,11 @@
 			nullable="yes"/>
 
 		<string-field
-			name="fixturesSeed"
+			name="fixtures-seed"
 			nullable="yes"/>
 
 		<integer-field
-			name="installationId"/>
+			name="installation-id"/>
 
 	</fields>
 

@@ -12,10 +12,10 @@ interface ExceptionLogLogic {
 
 	ExceptionLogRec logException (
 			Transaction parentTransaction,
-			String typeCode,
-			String source,
-			String summary,
-			String dump,
+			CharSequence typeCode,
+			CharSequence source,
+			CharSequence summary,
+			CharSequence dump,
 			Optional <Long> userId,
 			GenericExceptionResolution resolution);
 

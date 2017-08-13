@@ -1,5 +1,5 @@
 <record
-	name="userSession"
+	name="user-session"
 	type="event">
 
 	<fields>
@@ -16,24 +16,24 @@
 		<!-- TODO index -->
 
 		<timestamp-field
-			name="startTime"
+			name="start-time"
 			column-type="postgresql"/>
 
 		<!-- data -->
 
 		<timestamp-field
-			name="endTime"
+			name="end-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<reference-field
-			name="userAgent"
+			name="user-agent"
 			type="text"
 			nullable="yes"/>
 
 		<reference-field
-			name="consoleDeployment"
-			type="consoleDeployment"
+			name="console-deployment"
+			type="console-deployment"
 			nullable="yes"/>
 
 	</fields>

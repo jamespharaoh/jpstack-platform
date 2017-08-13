@@ -7,11 +7,14 @@
 	</plugin-dependencies>
 
 	<models>
-		<model name="apiDeployment"/>
-		<model name="consoleDeployment"/>
-		<model name="daemonDeployment"/>
-		<model name="deploymentVersion"/>
-		<enum-type name="deploymentState"/>
+
+		<enum-type name="deployment-state"/>
+
+		<model name="api-deployment"/>
+		<model name="console-deployment"/>
+		<model name="daemon-deployment"/>
+		<model name="deployment-version"/>
+
 	</models>
 
 	<fixtures>

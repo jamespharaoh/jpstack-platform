@@ -4,7 +4,7 @@
 
 	<models>
 		<model name="service"/>
-		<model name="serviceType"/>
+		<model name="service-type"/>
 	</models>
 
 	<layer name="fixture">

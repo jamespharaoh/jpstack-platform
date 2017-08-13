@@ -1,5 +1,5 @@
 <record
-	name="loggingEvent"
+	name="logging-event"
 	type="event">
 
 	<fields>
@@ -11,7 +11,7 @@
 		<!-- identity -->
 
 		<parent-field
-			type="loggingDynamicContext"
+			type="logging-dynamic-context"
 			cacheable="yes"/>
 
 		<timestamp-field
@@ -22,17 +22,17 @@
 
 		<enum-field
 			name="severity"
-			type="loggingEventSeverity"/>
+			type="logging-event-severity"/>
 
 		<string-field
 			name="parameters"/>
 
 		<string-field
-			name="additionalData"
+			name="additional-data"
 			nullable="yes"/>
 
 		<string-field
-			name="exceptionSummary"
+			name="exception-summary"
 			nullable="yes"/>
 
 	</fields>

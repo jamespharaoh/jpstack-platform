@@ -166,7 +166,7 @@ class ObjectBrowsePart <ObjectType extends Record <ObjectType>>
 
 			Optional <Long> objectIdOptional =
 				requestContext.stuffInteger (
-					consoleHelper.objectName () + "Id");
+					consoleHelper.objectTypeCamel () + "Id");
 
 			if (
 				optionalIsPresent (

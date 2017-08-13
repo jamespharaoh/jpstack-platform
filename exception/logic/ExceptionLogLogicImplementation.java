@@ -56,11 +56,11 @@ class ExceptionLogLogicImplementation
 	public
 	ExceptionLogRec logException (
 			@NonNull Transaction parentTransaction,
-			@NonNull String typeCode,
-			@NonNull String source,
-			@NonNull String summary,
-			@NonNull String dump,
-			@NonNull Optional<Long> userId,
+			@NonNull CharSequence typeCode,
+			@NonNull CharSequence source,
+			@NonNull CharSequence summary,
+			@NonNull CharSequence dump,
+			@NonNull Optional <Long> userId,
 			@NonNull GenericExceptionResolution resolution) {
 
 		try (
@@ -103,7 +103,7 @@ class ExceptionLogLogicImplementation
 					exceptionLogType)
 
 				.setSource (
-					source)
+					source.toString ())
 
 				.setSummary (
 					ExceptionUtilsImplementation.substituteNuls (

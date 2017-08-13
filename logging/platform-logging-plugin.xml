@@ -12,15 +12,15 @@
 
 	<models>
 
-		<enum-type name="loggingEventSeverity"/>
+		<enum-type name="logging-event-severity"/>
 
-		<model name="loggingGlobalRule"/>
-		<model name="loggingDynamicContext"/>
-		<model name="loggingDynamicContextInvocation"/>
-		<model name="loggingDynamicContextRule"/>
-		<model name="loggingEvent"/>
-		<model name="loggingStaticContext"/>
-		<model name="loggingStaticContextRule"/>
+		<model name="logging-global-rule"/>
+		<model name="logging-dynamic-context"/>
+		<model name="logging-dynamic-context-invocation"/>
+		<model name="logging-dynamic-context-rule"/>
+		<model name="logging-event"/>
+		<model name="logging-static-context"/>
+		<model name="logging-static-context-rule"/>
 
 	</models>
 

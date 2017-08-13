@@ -372,7 +372,7 @@ class ObjectLinksPageBuilder <
 			pageTitle =
 				stringFormat (
 					"%s %s",
-					container.consoleHelper ().friendlyName (),
+					container.consoleHelper ().friendlyNameSingular (),
 					camelToSpaces (
 						name));
 

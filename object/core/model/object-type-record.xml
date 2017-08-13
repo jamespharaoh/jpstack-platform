@@ -1,5 +1,5 @@
 <record
-	name="objectType"
+	name="object-type"
 	type="type">
 
 	<record-interfaces>

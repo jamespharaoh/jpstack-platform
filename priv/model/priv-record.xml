@@ -27,7 +27,7 @@
 	<collections>
 
 		<children-collection
-			type="userPriv"/>
+			type="user-priv"/>
 
 		<associative-collection
 			type="group"

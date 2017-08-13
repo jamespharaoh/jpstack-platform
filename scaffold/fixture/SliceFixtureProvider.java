@@ -16,7 +16,7 @@ import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.config.WbsConfig;
 import wbs.framework.database.Database;
 import wbs.framework.database.OwnedTransaction;
-import wbs.framework.fixtures.FixtureProvider;
+import wbs.framework.fixtures.Fixture;
 import wbs.framework.fixtures.TestAccounts;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.TaskLogger;
@@ -28,7 +28,7 @@ import wbs.platform.scaffold.model.SliceObjectHelper;
 @PrototypeComponent ("sliceFixtureProvider")
 public
 class SliceFixtureProvider
-	implements FixtureProvider {
+	implements Fixture {
 
 	// singleton dependencies
 

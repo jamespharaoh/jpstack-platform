@@ -1,5 +1,5 @@
 <record
-	name="loggingStaticContextRule"
+	name="logging-static-context-rule"
 	type="minor">
 
 	<fields>
@@ -11,12 +11,12 @@
 		<!-- identity -->
 
 		<parent-field
-			type="loggingStaticContext"
+			type="logging-static-context"
 			cacheable="yes"/>
 
 		<identity-enum-field
 			name="severity"
-			type="loggingEventSeverity"/>
+			type="logging-event-severity"/>
 
 		<!-- settings -->
 
@@ -24,7 +24,7 @@
 			name="recursive"/>
 
 		<duration-field
-			name="keepForDuration"/>
+			name="keep-for-duration"/>
 
 	</fields>
 
@@ -32,7 +32,7 @@
 
 		<associative-collection
 			name="events"
-			type="loggingEvent"
+			type="logging-event"
 			table="logging_static_context_rule_event"
 			owned="yes"/>
 

@@ -1,5 +1,5 @@
 <record
-	name="loggingDynamicContext"
+	name="logging-dynamic-context"
 	type="minor">
 
 	<fields>
@@ -11,7 +11,7 @@
 		<!-- identity -->
 
 		<parent-field
-			type="loggingStaticContext"
+			type="logging-static-context"
 			cacheable="yes"/>
 
 		<code-field

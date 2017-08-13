@@ -1,5 +1,5 @@
 <record
-	name="privType"
+	name="priv-type"
 	type="type">
 
 	<fields>
@@ -11,8 +11,8 @@
 		<!-- identity -->
 
 		<parent-field
-			name="parentObjectType"
-			type="objectType"/>
+			name="parent-object-type"
+			type="object-type"/>
 
 		<code-field/>
 

@@ -17,43 +17,43 @@
 			nullable="yes"/>
 
 		<string-field
-			name="adminEmail"
+			name="admin-email"
 			nullable="yes"/>
 
 		<string-field
-			name="supervisorConfigNames"
+			name="supervisor-config-names"
 			nullable="yes"/>
 
 		<integer-field
-			name="defaultHourOffset"
+			name="default-hour-offset"
 			default="0"/>
 
 		<integer-field
-			name="queueOverflowInactivityTime"
+			name="queue-overflow-inactivity-time"
 			nullable="yes"/>
 
 		<integer-field
-			name="queueOverflowOverloadTime"
+			name="queue-overflow-overload-time"
 			column="queue_overflow_response_time"
 			nullable="yes"/>
 
 		<integer-field
-			name="queueOverflowGraceTime"
+			name="queue-overflow-grace-time"
 			nullable="yes"/>
 
 		<string-field
-			name="defaultTimezone"
+			name="default-timezone"
 			nullable="yes"/>
 
 		<!-- statistics -->
 
 		<timestamp-field
-			name="currentQueueInactivityUpdateTime"
+			name="current-queue-inactivity-update-time"
 			column-type="iso"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="currentQueueInactivityTime"
+			name="current-queue-inactivity-time"
 			column-type="iso"
 			nullable="yes"/>
 

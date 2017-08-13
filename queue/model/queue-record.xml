@@ -25,21 +25,20 @@
 
 		<!-- details -->
 
-		<type-field
-			type="queueType"/>
+		<type-field/>
 
 		<!-- settings -->
 
 		<string-field
-			name="backgroundColour"
+			name="background-colour"
 			nullable="yes"/>
 
 		<string-field
-			name="foregroundColour"
+			name="foreground-colour"
 			nullable="yes"/>
 
 		<integer-field
-			name="defaultPriority"
+			name="default-priority"
 			column="priority"
 			nullable="yes"/>
 
@@ -49,7 +48,7 @@
 
 		<children-collection
 			name="subjects"
-			type="queueSubject"/>
+			type="queue-subject"/>
 
 	</collections>
 

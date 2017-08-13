@@ -174,7 +174,7 @@ class ObjectSummaryErrorsPart <
 				htmlTableCellWrite (
 					formatWriter,
 					capitalise (
-						errorObjectHelper.friendlyName ()));
+						errorObjectHelper.friendlyNameSingular ()));
 
 				if (
 					referenceEqualWithClass (

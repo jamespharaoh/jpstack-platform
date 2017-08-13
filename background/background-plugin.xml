@@ -7,7 +7,7 @@
 	</plugin-dependencies>
 
 	<models>
-		<model name="backgroundProcess"/>
+		<model name="background-process"/>
 	</models>
 
 	<fixtures>

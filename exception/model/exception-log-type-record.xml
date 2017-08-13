@@ -1,5 +1,5 @@
 <record
-	name="exceptionLogType"
+	name="exception-log-type"
 	type="type"
 	table="exception_type">
 

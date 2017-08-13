@@ -1,5 +1,5 @@
 <record
-	name="queueSubject"
+	name="queue-subject"
 	type="common">
 
 	<fields>
@@ -14,30 +14,30 @@
 			type="queue"/>
 
 		<identity-integer-field
-			name="objectId"/>
+			name="object-id"/>
 
 		<!-- state -->
 
 		<reference-field
-			name="preferredUser"
+			name="preferred-user"
 			type="user"
 			nullable="yes"/>
 
 		<!-- settings -->
 
 		<reference-field
-			name="forcePreferredUser"
+			name="force-preferred-user"
 			type="user"
 			nullable="yes"/>
 
 		<!-- statistics -->
 
 		<integer-field
-			name="totalItems"
+			name="total-items"
 			default="0"/>
 
 		<integer-field
-			name="activeItems"
+			name="active-items"
 			default="0"/>
 
 	</fields>
@@ -45,7 +45,7 @@
 	<collections>
 
 		<children-list
-			type="queueItem"/>
+			type="queue-item"/>
 
 	</collections>
 

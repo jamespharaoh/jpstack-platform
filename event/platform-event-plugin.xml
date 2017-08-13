@@ -8,23 +8,20 @@
 
 	<models>
 		<model name="event"/>
-		<model name="eventLink"/>
-		<model name="eventType"/>
+		<model name="event-link"/>
+		<model name="event-type"/>
 	</models>
 
 	<layer name="fixture">
-		<component class="logic.EventFixtureLogicImplementation"/>
-		<component class="fixture.EventTypeBuilder"/>
-		<component class="fixture.EventTypesBuilder"/>
-	</layer>
 
-	<layer name="model-meta">
-		<component class="metamodel.EventTypeSpec"/>
-		<component class="metamodel.EventTypesSpec"/>
+		<component class="logic.EventFixtureLogicImplementation"/>
+
 	</layer>
 
 	<layer name="logic">
+
 		<component class="logic.EventLogicImplementation"/>
+
 	</layer>
 
 	<layer name="console">
@@ -43,6 +40,10 @@
 		<component class="console.SimpleFormFieldUpdateHook"/>
 
 	</layer>
+
+	<meta-fixtures>
+		<meta-fixture name="event-types"/>
+	</meta-fixtures>
 
 	<fixtures>
 		<fixture name="event"/>

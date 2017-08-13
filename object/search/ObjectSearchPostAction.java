@@ -389,7 +389,7 @@ class ObjectSearchPostAction <
 
 				ConsoleContextType targetContextType =
 					consoleManager.contextType (
-						consoleHelper.objectName () + ":combo",
+						consoleHelper.objectTypeCamel () + ":combo",
 						true);
 
 				Optional <ConsoleContext> targetContext =

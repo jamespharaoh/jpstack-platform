@@ -12,7 +12,7 @@ import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.etc.TypeUtils.isNotInstanceOf;
 import static wbs.utils.string.CodeUtils.simplifyToCodeRequired;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.joinWithFullStop;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -163,7 +163,7 @@ class QueueConsoleLogicImplementation
 
 						String queueTypeName =
 							joinWithFullStop (
-								camelToUnderscore (
+								hyphenToUnderscore (
 									modelMeta.name ()),
 								simplifyToCodeRequired (
 									queueType.name ()));

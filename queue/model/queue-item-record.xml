@@ -1,5 +1,5 @@
 <record
-	name="queueItem"
+	name="queue-item"
 	type="event">
 
 	<fields>
@@ -11,14 +11,14 @@
 		<!-- identity -->
 
 		<parent-field
-			type="queueSubject"
+			type="queue-subject"
 			cacheable="yes"/>
 
 		<index-field
 			cacheable="yes"/>
 
 		<timestamp-field
-			name="createdTime"
+			name="created-time"
 			column-type="postgresql"/>
 
 		<!-- identity cache -->
@@ -35,15 +35,15 @@
 			name="details"/>
 
 		<integer-field
-			name="refObjectId"/>
+			name="ref-object-id"/>
 
 		<reference-field
-			name="processedUser"
+			name="processed-user"
 			type="user"
 			nullable="yes"/>
 
 		<yes-no-field
-			name="processedByPreferredUser"
+			name="processed-by-preferred-user"
 			nullable="yes"/>
 
 		<integer-field
@@ -51,17 +51,17 @@
 			default="0"/>
 
 		<timestamp-field
-			name="pendingTime"
+			name="pending-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="cancelledTime"
+			name="cancelled-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="processedTime"
+			name="processed-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
@@ -69,10 +69,10 @@
 
 		<enum-field
 			name="state"
-			type="queueItemState"/>
+			type="queue-item-state"/>
 
 		<reference-field
-			type="queueItemClaim"
+			type="queue-item-claim"
 			nullable="yes"/>
 
 	</fields>

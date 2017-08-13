@@ -1,0 +1,29 @@
+<plugin
+	name="object-verify"
+	package="wbs.platform.object.verify">
+
+	<models>
+		<model name="object-verification"/>
+	</models>
+
+	<layer name="daemon">
+		<component class="daemon.ObjectVerificationObjectDaemonHelper"/>
+	</layer>
+
+	<layer name="fixture">
+		<component class="fixture.ObjectVerificationBuilder"/>
+	</layer>
+
+	<layer name="logic">
+		<component class="logic.ObjectVerifyLogicImplementation"/>
+	</layer>
+
+	<layer name="model-meta">
+		<component class="metamodel.ObjectVerificationSpec"/>
+	</layer>
+
+	<console-modules>
+		<console-module name="object-verification"/>
+	</console-modules>
+
+</plugin>

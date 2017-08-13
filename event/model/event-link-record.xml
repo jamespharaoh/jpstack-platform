@@ -1,5 +1,5 @@
 <record
-	name="eventLink"
+	name="event-link"
 	type="minor">
 
 	<fields>
@@ -20,10 +20,10 @@
 		<!-- data -->
 
 		<integer-field
-			name="typeId"/>
+			name="type-id"/>
 
 		<integer-field
-			name="refId"/>
+			name="ref-id"/>
 
 	</fields>
 

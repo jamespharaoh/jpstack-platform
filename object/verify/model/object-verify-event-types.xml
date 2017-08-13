@@ -1,0 +1,13 @@
+<event-types>
+
+	<event-type
+		name="Object verification failed"
+		text="%0 failed verification"
+		admin="no"/>
+
+	<event-type
+		name="Object verification passed"
+		text="%0 passed validation"
+		admin="no"/>
+
+</event-types>

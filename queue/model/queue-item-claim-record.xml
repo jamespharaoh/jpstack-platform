@@ -1,5 +1,5 @@
 <record
-	name="queueItemClaim"
+	name="queue-item-claim"
 	type="event">
 
 	<fields>
@@ -11,12 +11,12 @@
 		<!-- identity -->
 
 		<parent-field
-			type="queueItem"/>
+			type="queue-item"/>
 
 		<!-- TODO index -->
 
 		<timestamp-field
-			name="startTime"
+			name="start-time"
 			column-type="postgresql"/>
 
 		<!-- data -->
@@ -25,12 +25,12 @@
 			type="user"/>
 
 		<reference-field
-			name="unclaimUser"
+			name="unclaim-user"
 			type="user"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="endTime"
+			name="end-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
@@ -38,7 +38,7 @@
 
 		<enum-field
 			name="status"
-			type="queueItemClaimStatus"/>
+			type="queue-item-claim-status"/>
 
 	</fields>
 

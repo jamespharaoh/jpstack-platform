@@ -1,5 +1,5 @@
 <record
-	name="postgresqlStatActivity"
+	name="postgresql-stat-activity"
 	type="common"
 	create="no"
 	mutable="no"
@@ -15,15 +15,15 @@
 		<!-- data -->
 
 		<string-field
-			name="databaseName"
+			name="database-name"
 			column="datname"/>
 
 		<string-field
-			name="userName"
+			name="user-name"
 			column="usename"/>
 
 		<string-field
-			name="currentQuery"
+			name="current-query"
 			column="current_query"/>
 
 	</fields>

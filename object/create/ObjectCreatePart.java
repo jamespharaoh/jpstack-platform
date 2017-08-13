@@ -286,7 +286,7 @@ class ObjectCreatePart <
 			htmlParagraphWriteFormat (
 				formatWriter,
 				"Please enter the details for the new %h",
-				consoleHelper.shortName ());
+				consoleHelper.shortNameSingular ());
 
 			form.outputFormTable (
 				transaction,
@@ -296,7 +296,7 @@ class ObjectCreatePart <
 					"/" + localFile),
 				stringFormat (
 					"create %h",
-					consoleHelper.shortName ()));
+					consoleHelper.shortNameSingular ()));
 
 		}
 

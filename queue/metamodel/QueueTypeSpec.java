@@ -35,8 +35,7 @@ class QueueTypeSpec
 		required = true)
 	String ref;
 
-	@DataAttribute (
-		required = true)
+	@DataAttribute
 	String preferredUserDelay;
 
 	@DataAttribute (

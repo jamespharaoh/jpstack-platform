@@ -12,15 +12,15 @@
 
 	<models>
 
-		<custom-type name="queueItemState"/>
-		<custom-type name="queueItemClaimStatus"/>
+		<custom-type name="queue-item-state"/>
+		<custom-type name="queue-item-claim-status"/>
 
 		<model name="queue"/>
-		<model name="queueItem"/>
-		<model name="queueItemView"/>
-		<model name="queueItemClaim"/>
-		<model name="queueSubject"/>
-		<model name="queueType"/>
+		<model name="queue-item"/>
+		<model name="queue-item-view"/>
+		<model name="queue-item-claim"/>
+		<model name="queue-subject"/>
+		<model name="queue-type"/>
 
 	</models>
 
