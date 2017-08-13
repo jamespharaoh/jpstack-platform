@@ -1,5 +1,6 @@
 package wbs.platform.queue.console;
 
+import static wbs.utils.collection.MapUtils.mapContainsKey;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringEqualSafe;
@@ -20,7 +21,6 @@ import wbs.framework.component.annotations.NormalLifecycleSetup;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
 import wbs.framework.component.annotations.StrongPrototypeDependency;
-import wbs.framework.component.manager.ComponentProvider;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
@@ -51,11 +51,8 @@ class QueueManager {
 	@SingletonDependency
 	QueueConsoleLogic queueConsoleLogic;
 
-	// prototype dependencies
-
 	@StrongPrototypeDependency
-	Map <String, ComponentProvider <QueueConsolePlugin>>
-		queueHelpersByBeanName;
+	Map <String, QueueConsolePlugin> queueHelpersByBeanName;
 
 	// state
 
@@ -81,7 +78,7 @@ class QueueManager {
 			// initialise queuePageFactories by querying each factory
 
 			for (
-				Map.Entry <String, ComponentProvider <QueueConsolePlugin>> entry
+				Map.Entry <String, QueueConsolePlugin> entry
 					: queueHelpersByBeanName.entrySet ()
 			) {
 
@@ -89,15 +86,19 @@ class QueueManager {
 					entry.getKey ();
 
 				QueueConsolePlugin queueHelper =
-					entry.getValue ().provide (
-						taskLogger);
+					entry.getValue ();
 
 				for (
 					String queueTypeCode
-						: queueHelper.queueTypeCodes ()
+						: queueHelper.queueTypeCodes (
+							taskLogger)
 				) {
 
-					if (queueHelpers.containsKey (queueTypeCode)) {
+					if (
+						mapContainsKey (
+							queueHelpers,
+							queueTypeCode)
+					) {
 
 						throw new RuntimeException (
 							"Duplicated queue page factory: " + queueTypeCode);

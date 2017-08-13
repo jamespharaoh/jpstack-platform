@@ -11,7 +11,8 @@ import wbs.web.responder.WebResponder;
 public
 interface QueueConsolePlugin {
 
-	List <String> queueTypeCodes ();
+	List <String> queueTypeCodes (
+			TaskLogger parentTaskLogger);
 
 	WebResponder makeResponder (
 			TaskLogger taskLogger,

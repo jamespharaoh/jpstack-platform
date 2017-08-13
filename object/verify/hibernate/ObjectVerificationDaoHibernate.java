@@ -4,6 +4,8 @@ import static wbs.utils.etc.NumberUtils.toJavaIntegerRequired;
 
 import java.util.List;
 
+import com.google.common.base.Optional;
+
 import lombok.NonNull;
 
 import org.hibernate.criterion.Order;
@@ -17,6 +19,7 @@ import wbs.framework.database.Transaction;
 import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
+import wbs.platform.object.core.model.ObjectTypeRec;
 import wbs.platform.object.verify.model.ObjectVerificationDaoMethods;
 import wbs.platform.object.verify.model.ObjectVerificationRec;
 
@@ -75,6 +78,46 @@ class ObjectVerificationDaoHibernate
 
 			);
 
+		}
+
+	}
+
+	@Override
+	public
+	Optional <ObjectVerificationRec> findByParent (
+			@NonNull Transaction parentTransaction,
+			@NonNull ObjectTypeRec parentType,
+			@NonNull Long parentId) {
+
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"findByParent");
+
+		) {
+
+			return findOne (
+				transaction,
+				ObjectVerificationRec.class,
+
+				createCriteria (
+					transaction,
+					ObjectVerificationRec.class,
+					"_objectVerification")
+
+				.add (
+					Restrictions.eq (
+						"_objectVerification.parentType",
+						parentType))
+
+				.add (
+					Restrictions.eq (
+						"_objectVerification.parentId",
+						parentId))
+
+			);
 
 		}
 

@@ -28,11 +28,13 @@
 		<reference-field
 			name="thumb-100-content"
 			type="content"
+			column="thumb100_content_id"
 			nullable="yes"/>
 
 		<reference-field
 			name="thumb-32-content"
 			type="content"
+			column="thumb32_content_id"
 			nullable="yes"/>
 
 		<string-field

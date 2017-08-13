@@ -1,5 +1,10 @@
 package wbs.platform.object.verify.logic;
 
+import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
+import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
+
+import com.google.common.base.Optional;
+
 import lombok.NonNull;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
@@ -40,7 +45,7 @@ class ObjectVerifyLogicImplementation
 
 	@Override
 	public <Type extends Record <Type>>
-	ObjectVerificationRec createObjectVerification (
+	ObjectVerificationRec createOrUpdateObjectVerification (
 			@NonNull Transaction parentTransaction,
 			@NonNull Type object) {
 
@@ -62,20 +67,46 @@ class ObjectVerifyLogicImplementation
 					transaction,
 					objectHelper.objectTypeId ());
 
-			return objectVerificationHelper.insert (
-				transaction,
-				objectVerificationHelper.createInstance ()
+			Optional <ObjectVerificationRec> verificationOptional =
+				objectVerificationHelper.findByParent (
+					transaction,
+					objectType,
+					object.getId ());
 
-				.setParentType (
-					objectType)
+			if (
+				optionalIsPresent (
+					verificationOptional)
+			) {
 
-				.setParentId (
-					object.getId ())
+				ObjectVerificationRec verification =
+					optionalGetRequired (
+						verificationOptional);
 
-				.setNextRun (
-					transaction.now ())
+				return verification
 
-			);
+					.setNextRun (
+						transaction.now ())
+
+				;
+
+			} else {
+
+				return objectVerificationHelper.insert (
+					transaction,
+					objectVerificationHelper.createInstance ()
+
+					.setParentType (
+						objectType)
+
+					.setParentId (
+						object.getId ())
+
+					.setNextRun (
+						transaction.now ())
+
+				);
+
+			}
 
 		}
 

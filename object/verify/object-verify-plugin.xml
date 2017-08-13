@@ -6,6 +6,11 @@
 		<model name="object-verification"/>
 	</models>
 
+	<layer name="console">
+		<component class="console.ObjectVerificationPendingFormResponder"/>
+		<component class="console.ObjectVerifyQueueConsolePlugin"/>
+	</layer>
+
 	<layer name="daemon">
 		<component class="daemon.ObjectVerificationObjectDaemonHelper"/>
 	</layer>

@@ -9,7 +9,7 @@ public
 interface ObjectVerifyLogic {
 
 	<Type extends Record <Type>>
-	ObjectVerificationRec createObjectVerification (
+	ObjectVerificationRec createOrUpdateObjectVerification (
 			Transaction parentTransaction,
 			Type object);
 
