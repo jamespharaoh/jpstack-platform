@@ -30,4 +30,8 @@ class ObjectVerificationSpec
 		required = true)
 	Boolean recurse;
 
+	@DataAttribute (
+		name = "errorField")
+	String errorFieldName;
+
 }
