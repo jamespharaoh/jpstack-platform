@@ -111,26 +111,38 @@ class WbsServletListener
 
 		) {
 
-			bootstrapComponentManager.registerStandardClasses (
-				taskLogger);
+			try {
 
-			bootstrapComponentManager.bootstrapComponent (
-				taskLogger,
-				this);
+				bootstrapComponentManager.registerStandardClasses (
+					taskLogger);
 
-			bootstrapComponentManager.registerPluginBootstrapComponents (
-				taskLogger,
-				stringSplitComma (
-					event.getServletContext ().getInitParameter (
-						"layerNames")));
+				bootstrapComponentManager.bootstrapComponent (
+					taskLogger,
+					this);
 
-			registerWebComponents (
-				taskLogger,
-				bootstrapComponentManager);
+				bootstrapComponentManager.registerPluginBootstrapComponents (
+					taskLogger,
+					stringSplitComma (
+						event.getServletContext ().getInitParameter (
+							"layerNames")));
 
-			contextInitializedReal (
-				taskLogger,
-				event);
+				registerWebComponents (
+					taskLogger,
+					bootstrapComponentManager);
+
+				contextInitializedReal (
+					taskLogger,
+					event);
+
+			} catch (Throwable exception) {
+
+				taskLogger.errorFormatException (
+					exception,
+					"Failed to initialise component manager, shutting down");
+
+				shutdown ();
+
+			}
 
 		}
 
