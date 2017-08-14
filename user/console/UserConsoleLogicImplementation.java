@@ -291,7 +291,7 @@ class UserConsoleLogicImplementation
 			@NonNull Transaction parentTransaction,
 			@NonNull ReadableInstant timestamp) {
 
-		return timeFormatter.timeString (
+		return timeFormatter.timeStringSeconds (
 			timezone (
 				parentTransaction),
 			timestamp);
