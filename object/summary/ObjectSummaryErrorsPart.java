@@ -97,7 +97,8 @@ class ObjectSummaryErrorsPart <
 				consoleHelper.hooks ().verifyData (
 					transaction,
 					object,
-					true);
+					true,
+					false);
 
 		}
 

@@ -3,10 +3,10 @@ package wbs.platform.object.verify.console;
 import static wbs.utils.collection.CollectionUtils.listFirstElementRequired;
 import static wbs.utils.collection.CollectionUtils.listSecondElementRequired;
 import static wbs.utils.collection.IterableUtils.iterableOnlyItemByClass;
-import static wbs.utils.etc.Misc.todo;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.joinWithFullStop;
 import static wbs.utils.string.StringUtils.stringSplitColon;
 
@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
 
 import lombok.NonNull;
 
+import wbs.console.context.ConsoleContext;
 import wbs.console.helper.core.ConsoleHelper;
 import wbs.console.helper.manager.ConsoleObjectManager;
 import wbs.console.module.ConsoleManager;
@@ -134,7 +135,8 @@ class ObjectVerifyQueueConsolePlugin
 
 				builder.add (
 					joinWithFullStop (
-						queueParentHelper.objectTypeHyphen (),
+						hyphenToUnderscore (
+							queueParentHelper.objectTypeHyphen ()),
 						listSecondElementRequired (
 							queueNameParts)));
 
@@ -162,12 +164,9 @@ class ObjectVerifyQueueConsolePlugin
 
 		) {
 
-			throw todo ();
-
-			/*
 			ConsoleContext targetContext =
 				consoleManager.context (
-					"ticket.pending",
+					"objectVerification",
 					true);
 
 			consoleManager.changeContext (
@@ -178,7 +177,6 @@ class ObjectVerifyQueueConsolePlugin
 
 			return pendingFormResponderProvider.provide (
 				taskLogger);
-			*/
 
 		}
 

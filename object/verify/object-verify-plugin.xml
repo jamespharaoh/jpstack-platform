@@ -7,6 +7,7 @@
 	</models>
 
 	<layer name="console">
+		<component class="console.ObjectVerificationPendingFormAction"/>
 		<component class="console.ObjectVerificationPendingFormResponder"/>
 		<component class="console.ObjectVerifyQueueConsolePlugin"/>
 	</layer>

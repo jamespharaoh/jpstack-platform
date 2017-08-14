@@ -3,6 +3,7 @@ package wbs.platform.daemon;
 import static wbs.utils.collection.CollectionUtils.emptyList;
 import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.etc.Misc.sleepForDuration;
+import static wbs.utils.etc.NumberUtils.moreThanZero;
 import static wbs.utils.etc.NumberUtils.notEqualToZero;
 import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.string.StringUtils.pluralise;
@@ -237,12 +238,32 @@ class ObjectDaemonWrapper <IdType> {
 						numProcessed)
 				) {
 
-					taskLogger.noticeFormat (
-						"Processed %s",
-						pluralise (
-							numProcessed,
-							objectDaemon.itemNameSingular (),
-							objectDaemon.itemNamePlural ()));
+					if (
+						moreThanZero (
+							taskLogger.errorCount ())
+					) {
+
+						taskLogger.errorFormat (
+							"Processed %s with %s",
+							pluralise (
+								numProcessed,
+								objectDaemon.itemNameSingular (),
+								objectDaemon.itemNamePlural ()),
+							pluralise (
+								taskLogger.errorCount (),
+								"error",
+								"errors"));
+
+					} else {
+
+						taskLogger.noticeFormat (
+							"Processed %s",
+							pluralise (
+								numProcessed,
+								objectDaemon.itemNameSingular (),
+								objectDaemon.itemNamePlural ()));
+
+					}
 
 				}
 
@@ -305,7 +326,8 @@ class ObjectDaemonWrapper <IdType> {
 	private
 	void processObject (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull IdType objectId) {
+			@NonNull IdType objectId)
+		throws InterruptedException {
 
 		try (
 
@@ -321,6 +343,10 @@ class ObjectDaemonWrapper <IdType> {
 				objectDaemon.processObject (
 					taskLogger,
 					objectId);
+
+			} catch (InterruptedException exception) {
+
+				throw exception;
 
 			} catch (Exception exception) {
 
@@ -342,7 +368,6 @@ class ObjectDaemonWrapper <IdType> {
 					exception,
 					optionalAbsent (),
 					GenericExceptionResolution.tryAgainLater);
-
 
 			}
 

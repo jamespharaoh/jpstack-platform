@@ -198,7 +198,8 @@ class ObjectSettingsPageBuilder <
 						tabName)
 
 					.defaultLabel (
-						capitalise (friendlyShortName))
+						capitalise (
+							friendlyShortName))
 
 					.localFile (
 						fileName)

@@ -125,7 +125,8 @@ class ObjectSettingsPageComponentBuilder
 					spec.friendlyLongName (),
 					stringFormat (
 						"%s %s",
-						context.friendlyName (),
+						capitalise (
+							context.friendlyName ()),
 						camelToSpaces (
 							ifNull (
 								spec.longName (),

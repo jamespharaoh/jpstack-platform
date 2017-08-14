@@ -183,7 +183,8 @@ class ObjectSettingsAction <
 				consoleHelper.hooks ().verifyData (
 					transaction,
 					object,
-					false);
+					false,
+					true);
 
 			if (
 				collectionIsNotEmpty (
