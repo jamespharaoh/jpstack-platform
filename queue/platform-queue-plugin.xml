@@ -39,8 +39,8 @@
 		<component class="console.QueueItemConsoleHooks"/>
 		<component class="console.QueueItemQueueStatsProvider"/>
 		<component class="console.QueueItemUserStatsProvider"/>
-		<component class="console.QueueItemsStatusLinePart"/>
 		<component class="console.QueueItemsStatusLine"/>
+		<component class="console.QueueItemsStatusLinePart"/>
 		<component class="console.QueueListActivePart"/>
 		<component class="console.QueueManager"/>
 		<component class="console.QueueStatsGrouper"/>

@@ -18,6 +18,8 @@
 
 		<bootstrap-component class="console.SupervisorUserStatsGrouperSpec"/>
 
+		<component class="console.SupervisorHelperImplementation"/>
+		<component class="console.SupervisorUserStatsGrouperBuilder"/>
 		<component class="console.UserConsoleLogicImplementation"/>
 		<component class="console.UserPasswordAction"/>
 		<component class="console.UserPasswordPart"/>
@@ -26,8 +28,6 @@
 		<component class="console.UserPrivsSummaryPart"/>
 		<component class="console.UserSessionLogicImplementation"/>
 		<component class="console.UserStatsGrouper"/>
-		<component class="console.SupervisorHelperImplementation"/>
-		<component class="console.SupervisorUserStatsGrouperBuilder"/>
 
 	</layer>
 

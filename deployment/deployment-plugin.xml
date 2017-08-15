@@ -29,8 +29,8 @@
 
 	<layer name="console">
 		<component class="console.ApiDeploymentRestartFormActionHelper"/>
-		<component class="console.DaemonDeploymentRestartFormActionHelper"/>
 		<component class="console.ConsoleDeploymentRestartFormActionHelper"/>
+		<component class="console.DaemonDeploymentRestartFormActionHelper"/>
 	</layer>
 
 	<layer name="logic">

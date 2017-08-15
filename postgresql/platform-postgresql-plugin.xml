@@ -35,8 +35,8 @@
 	</layer>
 
 	<layer name="console">
-		<component class="console.PostgresqlMaintenanceListPart"/>
 		<component class="console.PostgresqlActivityPart"/>
+		<component class="console.PostgresqlMaintenanceListPart"/>
 		<component class="console.PostgresqlTablesPart"/>
 	</layer>
 
