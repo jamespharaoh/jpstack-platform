@@ -149,6 +149,27 @@ class ObjectListPageComponentBuilder
 					optionalOf (
 						targetContextTypeName))
 
+				.addValueProperty (
+					"moveControls",
+					optionalOf (
+						ifNull (
+							spec.moveControls (),
+							false)))
+
+				.addValueProperty (
+					"editControl",
+					optionalOf (
+						ifNull (
+							spec.editControl (),
+							false)))
+
+				.addValueProperty (
+					"deleteControl",
+					optionalOf (
+						ifNull (
+							spec.deleteControl (),
+							false)))
+
 			);
 
 			target.registerDefinition (
@@ -183,6 +204,39 @@ class ObjectListPageComponentBuilder
 					"singleton",
 					"%sListPartFactory",
 					context.newComponentNamePrefix ())
+
+			);
+
+			target.registerDefinition (
+				taskLogger,
+				new ComponentDefinition ()
+
+				.nameFormat (
+					"%sListAction",
+					context.newComponentNamePrefix ())
+
+				.scope (
+					"prototype")
+
+				.componentClass (
+					ObjectListAction.class)
+
+				.hide (
+					true)
+
+				.addReferencePropertyFormat (
+					"consoleHelper",
+					"singleton",
+					"%sConsoleHelper",
+					hyphenToCamel (
+						context.objectType ()))
+
+				.addReferencePropertyFormat (
+					"responderProvider",
+					"prototype",
+					"%sListResponder",
+					hyphenToCamel (
+						context.objectType ()))
 
 			);
 

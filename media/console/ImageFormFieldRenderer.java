@@ -113,6 +113,7 @@ class ImageFormFieldRenderer <Container>
 			@NonNull Container container,
 			@NonNull Map <String, Object> hints,
 			@NonNull Optional <MediaRec> interfaceValueOptional,
+			@NonNull Optional <MediaRec> defaultValueOptional,
 			@NonNull FormType formType,
 			@NonNull String formName) {
 

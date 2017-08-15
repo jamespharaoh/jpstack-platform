@@ -4,17 +4,17 @@ import wbs.console.helper.core.ConsoleHelper;
 import wbs.console.priv.UserPrivChecker;
 import wbs.console.request.ConsoleRequestContext;
 
+import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
-import wbs.framework.logging.TaskLogger;
 
 public
-interface CriteriaSpec {
+interface CriteriaSpec <RecordType extends Record <RecordType>> {
 
 	boolean evaluate (
-			TaskLogger parentTaskLogger,
+			Transaction parentTransaction,
 			ConsoleRequestContext requestContext,
 			UserPrivChecker privChecker,
-			ConsoleHelper <?> objectHelper,
-			Record <?> object);
+			ConsoleHelper <RecordType> consoleHelper,
+			RecordType object);
 
 }
