@@ -219,7 +219,7 @@ class ObjectEventsPageBuilder <
 				spec.privKey (),
 				stringFormat (
 					"%s.manage",
-					consoleHelper.objectName ()));
+					consoleHelper.objectTypeCamel ()));
 
 		tabName =
 			ifNull (

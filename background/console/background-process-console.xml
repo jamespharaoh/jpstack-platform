@@ -96,6 +96,9 @@
 				<description-field/>
 				<deleted-field/>
 
+				<duration-field
+					name="frequency"/>
+
 				<integer-field
 					name="numRuns"/>
 
@@ -144,14 +147,14 @@
 				<description-field/>
 				<deleted-field/>
 
+				<duration-field
+					name="frequency"/>
+
 				<yes-no-field
 					name="enabled"/>
 
 				<yes-no-field
 					name="debug"/>
-
-				<duration-field
-					name="frequency"/>
 
 			</columns>
 

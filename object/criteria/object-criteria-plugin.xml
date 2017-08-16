@@ -5,11 +5,11 @@
 	<layer name="console">
 
 		<bootstrap-component class="WhereDeletedCriteriaSpec"/>
-		<bootstrap-component class="WhereNotDeletedCriteriaSpec"/>
-		<bootstrap-component class="WhereNullCriteriaSpec"/>
-		<bootstrap-component class="WhereNotNullCriteriaSpec"/>
 		<bootstrap-component class="WhereICanManageCriteriaSpec"/>
 		<bootstrap-component class="WhereInCriteriaSpec"/>
+		<bootstrap-component class="WhereNotDeletedCriteriaSpec"/>
+		<bootstrap-component class="WhereNotNullCriteriaSpec"/>
+		<bootstrap-component class="WhereNullCriteriaSpec"/>
 
 	</layer>
 

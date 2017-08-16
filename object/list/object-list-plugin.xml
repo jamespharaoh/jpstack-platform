@@ -4,9 +4,9 @@
 
 	<layer name="console">
 
+		<bootstrap-component class="ObjectListBrowserSpec"/>
 		<bootstrap-component class="ObjectListPageComponentBuilder"/>
 		<bootstrap-component class="ObjectListPageSpec"/>
-		<bootstrap-component class="ObjectListBrowserSpec"/>
 		<bootstrap-component class="ObjectListTabSpec"/>
 
 		<component class="ObjectListPageBuilder"/>

@@ -30,9 +30,9 @@ $(function () {
 		} else if (data.claimed) {
 
 			$("#queue-cell").text ([
-				String (data.total),
+				String (data.claimed),
 				" ",
-				data.total > 1 ? "items" : "item",
+				data.claimed > 1 ? "items" : "item",
 				" claimed",
 			].join (""));
 

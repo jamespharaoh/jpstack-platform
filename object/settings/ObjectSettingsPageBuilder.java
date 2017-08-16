@@ -198,7 +198,8 @@ class ObjectSettingsPageBuilder <
 						tabName)
 
 					.defaultLabel (
-						capitalise (friendlyShortName))
+						capitalise (
+							friendlyShortName))
 
 					.localFile (
 						fileName)
@@ -348,7 +349,7 @@ class ObjectSettingsPageBuilder <
 					.nextContextTypeName (
 						ifNull (
 							spec.listContextTypeName (),
-						consoleHelper.objectName () + ":list"))
+						consoleHelper.objectTypeCamel () + ":list"))
 
 					.editPrivKey (
 						privKey);
@@ -421,7 +422,7 @@ class ObjectSettingsPageBuilder <
 					spec.friendlyLongName (),
 					stringFormat (
 						"%s %s",
-						consoleHelper.friendlyName (),
+						consoleHelper.friendlyNameSingular (),
 						camelToSpaces (
 							longName)));
 
@@ -458,7 +459,7 @@ class ObjectSettingsPageBuilder <
 					spec.privKey (),
 					stringFormat (
 						"%s.manage",
-						consoleHelper.objectName ()));
+						consoleHelper.objectTypeCamel ()));
 
 			formType =
 				genericCastUnchecked (

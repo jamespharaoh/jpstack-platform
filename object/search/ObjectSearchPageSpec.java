@@ -22,6 +22,8 @@ import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("object-search-page")
@@ -42,11 +44,13 @@ class ObjectSearchPageSpec
 
 	// attributes
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String name;
 
 	@DataAttribute (
-		name = "object-type")
+		name = "object-type",
+		format = StringFormat.hyphenated)
 	String objectTypeName;
 
 	@DataAttribute
@@ -54,28 +58,34 @@ class ObjectSearchPageSpec
 
 	@DataAttribute (
 		name = "search-class",
-		required = true)
+		required = true,
+		format = StringFormat.className)
 	String searchClassName;
 
 	@DataAttribute (
 		name = "search-form",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String searchFormTypeName;
 
 	@DataAttribute (
-		name = "search-dao-method")
+		name = "search-dao-method",
+		format = StringFormat.camelCase)
 	String searchDaoMethodName;
 
 	@DataAttribute (
-		name = "results-class")
+		name = "results-class",
+		format = StringFormat.className)
 	String resultsClassName;
 
 	@DataAttribute (
-		name = "results-form")
+		name = "results-form",
+		format = StringFormat.hyphenated)
 	String resultsFormTypeName;
 
 	@DataAttribute (
-		name = "results-dao-method")
+		name = "results-dao-method",
+		format = StringFormat.camelCase)
 	String resultsDaoMethodName;
 
 	@DataAttribute
@@ -97,11 +107,13 @@ class ObjectSearchPageSpec
 	String fileName;
 
 	@DataAttribute (
-		name = "search-responder")
+		name = "search-responder",
+		format = StringFormat.camelCase)
 	String searchResponderName;
 
 	@DataAttribute (
-		name = "results-responder")
+		name = "results-responder",
+		format = StringFormat.camelCase)
 	String searchResultsResponderName;
 
 	@DataChildren (

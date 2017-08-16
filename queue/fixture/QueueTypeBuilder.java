@@ -2,7 +2,7 @@ package wbs.platform.queue.fixture;
 
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.string.CodeUtils.simplifyToCodeRequired;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -83,7 +83,7 @@ class QueueTypeBuilder
 
 			transaction.noticeFormat (
 				"Create queue type %s.%s",
-				camelToUnderscore (
+				hyphenToUnderscore (
 					ifNull (
 						spec.subject (),
 						parent.name ())),
@@ -98,7 +98,7 @@ class QueueTypeBuilder
 			throw new RuntimeException (
 				stringFormat (
 					"Error creating queue type %s.%s",
-					camelToUnderscore (
+					hyphenToUnderscore (
 						ifNull (
 							spec.subject (),
 							parent.name ())),
@@ -126,7 +126,7 @@ class QueueTypeBuilder
 			// lookup parent type
 
 			String parentTypeCode =
-				camelToUnderscore (
+				hyphenToUnderscore (
 					ifNull (
 						spec.parent (),
 						parent.name ()));
@@ -140,7 +140,7 @@ class QueueTypeBuilder
 			// lookup subject type
 
 			String subjectTypeCode =
-				camelToUnderscore (
+				hyphenToUnderscore (
 					spec.subject ());
 
 			ObjectTypeRec subjectType =
@@ -152,7 +152,7 @@ class QueueTypeBuilder
 			// lookup ref type
 
 			String refTypeCode =
-				camelToUnderscore (
+				hyphenToUnderscore (
 					spec.ref ());
 
 			ObjectTypeRec refType =

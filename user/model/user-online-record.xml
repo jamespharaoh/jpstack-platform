@@ -1,5 +1,5 @@
 <record
-	name="userOnline"
+	name="user-online"
 	type="ephemeral">
 
 	<fields>
@@ -17,14 +17,14 @@
 		<!-- state -->
 
 		<string-field
-			name="sessionId"/>
+			name="session-id"/>
 
 		<timestamp-field
 			name="timestamp"
 			column-type="postgresql"/>
 
 		<reference-field
-			type="userSession"/>
+			type="user-session"/>
 
 	</fields>
 

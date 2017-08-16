@@ -8,35 +8,54 @@ import wbs.console.module.ConsoleSpec;
 import wbs.console.priv.UserPrivChecker;
 import wbs.console.request.ConsoleRequestContext;
 
+import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.data.annotations.DataClass;
+import wbs.framework.database.NestedTransaction;
+import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
-import wbs.framework.logging.TaskLogger;
+import wbs.framework.logging.LogContext;
 
 @Accessors (fluent = true)
 @DataClass ("where-i-can-manage")
 @PrototypeComponent ("whereICanManageCriteriaSpec")
 public
-class WhereICanManageCriteriaSpec
+class WhereICanManageCriteriaSpec <RecordType extends Record <RecordType>>
 	implements
 		ConsoleSpec,
-		CriteriaSpec {
+		CriteriaSpec <RecordType> {
+
+	// singleton dependencies
+
+	@ClassSingletonDependency
+	LogContext logContext;
 
 	// implementation
 
 	@Override
 	public
 	boolean evaluate (
-			@NonNull TaskLogger parentTaskLogger,
+			@NonNull Transaction parentTransaction,
 			@NonNull ConsoleRequestContext requestContext,
 			@NonNull UserPrivChecker privChecker,
-			@NonNull ConsoleHelper <?> objectHelper,
-			@NonNull Record <?> object) {
+			@NonNull ConsoleHelper <RecordType> objectHelper,
+			@NonNull RecordType object) {
 
-		return privChecker.canRecursive (
-			parentTaskLogger,
-			object,
-			"manage");
+		try (
+
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"evaluate");
+
+		) {
+
+			return objectHelper.canManage (
+				transaction,
+				privChecker,
+				object);
+
+		}
 
 	}
 

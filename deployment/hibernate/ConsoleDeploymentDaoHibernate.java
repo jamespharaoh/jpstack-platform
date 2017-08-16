@@ -9,7 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.deployment.model.ConsoleDeploymentDaoMethods;
@@ -17,7 +17,7 @@ import wbs.platform.deployment.model.ConsoleDeploymentRec;
 
 public
 class ConsoleDeploymentDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements ConsoleDeploymentDaoMethods {
 
 	// singleton dependencies

@@ -1,5 +1,5 @@
 <record
-	name="menuItem"
+	name="menu-item"
 	type="minor">
 
 	<fields>
@@ -11,7 +11,7 @@
 		<!-- identity -->
 
 		<parent-field
-			type="menuGroup"/>
+			type="menu-group"/>
 
 		<code-field/>
 
@@ -29,10 +29,10 @@
 			name="label"/>
 
 		<string-field
-			name="targetPath"/>
+			name="target-path"/>
 
 		<string-field
-			name="targetFrame"/>
+			name="target-frame"/>
 
 	</fields>
 

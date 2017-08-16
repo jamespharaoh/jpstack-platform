@@ -1,5 +1,5 @@
 <record
-	name="queueItemView"
+	name="queue-item-view"
 	type="event"
 	create="no">
 
@@ -8,12 +8,12 @@
 		<!-- id -->
 
 		<foreign-id-field
-			field="queueItem"/>
+			field="queue-item"/>
 
 		<!-- identity -->
 
 		<master-field
-			type="queueItem"/>
+			type="queue-item"/>
 
 		<!-- index -->
 
@@ -22,7 +22,7 @@
 			type="queue"/>
 
 		<reference-field
-			name="processedByUser"
+			name="processed-by-user"
 			type="user"/>
 
 		<timestamp-field
@@ -32,16 +32,16 @@
 		<!-- data -->
 
 		<integer-field
-			name="numCreated"/>
+			name="num-created"/>
 
 		<integer-field
-			name="numProcessed"/>
+			name="num-processed"/>
 
 		<integer-field
-			name="numPreferred"/>
+			name="num-preferred"/>
 
 		<integer-field
-			name="numNotPreferred"/>
+			name="num-not-preferred"/>
 
 	</fields>
 

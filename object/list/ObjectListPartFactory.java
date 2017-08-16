@@ -45,21 +45,22 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 	// prototype dependencies
 
 	@PrototypeDependency
-	ComponentProvider <ObjectListTabSpec> objectListTabSpecProvider;
+	ComponentProvider <ObjectListTabSpec <RecordType>>
+		objectListTabSpecProvider;
 
 	@PrototypeDependency
 	ComponentProvider <ObjectListPart <RecordType, ?>> objectListPartProvider;
 
 	@PrototypeDependency
-	ComponentProvider <WhereDeletedCriteriaSpec>
+	ComponentProvider <WhereDeletedCriteriaSpec <RecordType>>
 		whereDeletedCriteriaSpecProvider;
 
 	@PrototypeDependency
-	ComponentProvider <WhereICanManageCriteriaSpec>
+	ComponentProvider <WhereICanManageCriteriaSpec <RecordType>>
 		whereICanManageCriteriaSpecProvider;
 
 	@PrototypeDependency
-	ComponentProvider <WhereNotDeletedCriteriaSpec>
+	ComponentProvider <WhereNotDeletedCriteriaSpec <RecordType>>
 		whereNotDeletedCriteriaSpecProvider;
 
 	// properties
@@ -77,13 +78,22 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 	ConsoleFormType <RecordType> formType;
 
 	@Getter @Setter
-	Map <String, ObjectListTabSpec> listTabSpecs;
+	Map <String, ObjectListTabSpec <RecordType>> listTabSpecs;
 
 	@Getter @Setter
 	Map <String, ObjectListBrowserSpec> listBrowserSpecs;
 
 	@Getter @Setter
 	String targetContextTypeName;
+
+	@Getter @Setter
+	Boolean moveControls;
+
+	@Getter @Setter
+	Boolean editControl;
+
+	@Getter @Setter
+	Boolean deleteControl;
 
 	// implementation
 
@@ -132,6 +142,15 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 				.targetContextTypeName (
 					targetContextTypeName)
 
+				.moveControls (
+					moveControls)
+
+				.editControl (
+					editControl)
+
+				.deleteControl (
+					deleteControl)
+
 			);
 
 		}
@@ -139,7 +158,7 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 	}
 
 	private
-	Map <String, ObjectListTabSpec> defaultListTabSpecs (
+	Map <String, ObjectListTabSpec <RecordType>> defaultListTabSpecs (
 			@NonNull TaskLogger parentTaskLogger) {
 
 		try (
@@ -153,7 +172,8 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 
 			if (consoleHelper.deletedExists ()) {
 
-				return ImmutableMap.<String,ObjectListTabSpec>builder ()
+				return ImmutableMap.<String, ObjectListTabSpec <RecordType>>
+					builder ()
 
 					.put (
 						"all",
@@ -199,7 +219,8 @@ class ObjectListPartFactory <RecordType extends Record <RecordType>>
 
 			} else {
 
-				return ImmutableMap.<String,ObjectListTabSpec>builder ()
+				return ImmutableMap.<String, ObjectListTabSpec <RecordType>>
+					builder ()
 
 					.put (
 						"all",

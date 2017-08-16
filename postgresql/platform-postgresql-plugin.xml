@@ -7,16 +7,22 @@
 	</plugin-dependencies>
 
 	<sql-scripts>
+
 		<sql-schema name="postgresql"/>
 		<sql-schema name="postgresql-maintenance"/>
+
 		<sql-data name="postgresql-maintenance-data"/>
+
 	</sql-scripts>
 
 	<models>
-		<custom-type name="postgresqlMaintenanceFrequency"/>
-		<model name="postgresqlMaintenance"/>
-		<model name="postgresqlClass"/>
-		<model name="postgresqlStatActivity"/>
+
+		<custom-type name="postgresql-maintenance-frequency"/>
+
+		<model name="postgresql-maintenance"/>
+		<model name="postgresql-class"/>
+		<model name="postgresql-stat-activity"/>
+
 	</models>
 
 	<layer name="data">
@@ -29,8 +35,8 @@
 	</layer>
 
 	<layer name="console">
-		<component class="console.PostgresqlMaintenanceListPart"/>
 		<component class="console.PostgresqlActivityPart"/>
+		<component class="console.PostgresqlMaintenanceListPart"/>
 		<component class="console.PostgresqlTablesPart"/>
 	</layer>
 

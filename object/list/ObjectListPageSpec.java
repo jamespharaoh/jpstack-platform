@@ -40,6 +40,15 @@ class ObjectListPageSpec
 		name = "target-context-type")
 	String targetContextTypeName;
 
+	@DataAttribute
+	Boolean moveControls;
+
+	@DataAttribute
+	Boolean editControl;
+
+	@DataAttribute
+	Boolean deleteControl;
+
 	// children
 
 	@DataChildren (

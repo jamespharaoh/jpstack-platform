@@ -1,9 +1,10 @@
-package wbs.platform.event.fixture;
+package wbs.platform.object.verify.fixture;
+
+import static wbs.utils.etc.Misc.doNothing;
 
 import lombok.NonNull;
 
 import wbs.framework.builder.Builder;
-import wbs.framework.builder.Builder.MissingBuilderBehaviour;
 import wbs.framework.builder.annotations.BuildMethod;
 import wbs.framework.builder.annotations.BuilderParent;
 import wbs.framework.builder.annotations.BuilderSource;
@@ -17,11 +18,11 @@ import wbs.framework.entity.meta.model.RecordSpec;
 import wbs.framework.entity.model.Model;
 import wbs.framework.logging.LogContext;
 
-import wbs.platform.event.metamodel.EventTypesSpec;
+import wbs.platform.object.verify.metamodel.ObjectVerificationSpec;
 
-@PrototypeComponent ("eventTypesBuilder")
+@PrototypeComponent ("objectVerificationBuilder")
 public
-class EventTypesBuilder
+class ObjectVerificationBuilder
 	implements ModelFixtureBuilderComponent {
 
 	// singleton dependencies
@@ -35,7 +36,7 @@ class EventTypesBuilder
 	RecordSpec parent;
 
 	@BuilderSource
-	EventTypesSpec spec;
+	ObjectVerificationSpec spec;
 
 	@BuilderTarget
 	Model <?> model;
@@ -58,12 +59,7 @@ class EventTypesBuilder
 
 		) {
 
-			builder.descend (
-				transaction,
-				parent,
-				spec.eventTypes (),
-				model,
-				MissingBuilderBehaviour.error);
+			doNothing ();
 
 		}
 

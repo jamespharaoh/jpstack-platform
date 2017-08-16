@@ -1,5 +1,5 @@
 <record
-	name="backgroundProcess"
+	name="background-process"
 	type="major">
 
 	<fields>
@@ -11,8 +11,8 @@
 		<!-- identity -->
 
 		<parent-field
-			name="parentType"
-			type="objectType"/>
+			name="parent-type"
+			type="object-type"/>
 
 		<code-field/>
 
@@ -38,37 +38,37 @@
 		<!-- state -->
 
 		<integer-field
-			name="numRuns"
+			name="num-runs"
 			default="0"/>
 
 		<integer-field
-			name="numConsecutiveFailures"
+			name="num-consecutive-failures"
 			default="0"/>
 
 		<yes-no-field
-			name="lastSuccessTime"
+			name="last-success-time"
 			nullable="yes"/>
 
 		<yes-no-field
-			name="lastFailureTime"
+			name="last-failure-time"
 			nullable="yes"/>
 
 		<yes-no-field
-			name="lastRunSuccess"
+			name="last-run-success"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="lastRunTime"
+			name="last-run-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="nextRunTime"
+			name="next-run-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<duration-field
-			name="lastRunDuration"
+			name="last-run-duration"
 			nullable="yes"/>
 
 		<yes-no-field
@@ -76,26 +76,26 @@
 			default="no"/>
 
 		<string-field
-			name="runningToken"
+			name="running-token"
 			nullable="yes"/>
 
 		<reference-field
-			name="runningDaemonDeployment"
-			type="daemonDeployment"
+			name="running-daemon-deployment"
+			type="daemon-deployment"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="runningStartTime"
+			name="running-start-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="runningWatchdogTime"
+			name="running-watchdog-time"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<string-field
-			name="lastTaskLog"
+			name="last-task-log"
 			nullable="yes"/>
 
 	</fields>

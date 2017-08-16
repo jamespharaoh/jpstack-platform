@@ -149,7 +149,7 @@ class ObjectRemoveAction
 				objectHelper.getCode (
 					genericCastUnchecked (
 						ephemeralObject)),
-				objectHelper.shortName (),
+				objectHelper.shortNameSingular (),
 				parentObject);
 
 			transaction.commit ();
@@ -158,7 +158,7 @@ class ObjectRemoveAction
 				stringFormat (
 					"%s deleted",
 					capitalise (
-						objectHelper.friendlyName ())));
+						objectHelper.friendlyNameSingular ())));
 
 			ConsoleContextType targetContextType =
 				consoleManager.contextType (

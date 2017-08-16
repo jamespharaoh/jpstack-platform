@@ -11,8 +11,8 @@
 	</sql-scripts>
 
 	<models>
-		<model name="menuGroup"/>
-		<model name="menuItem"/>
+		<model name="menu-group"/>
+		<model name="menu-item"/>
 	</models>
 
 	<fixtures>

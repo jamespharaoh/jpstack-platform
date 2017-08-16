@@ -229,7 +229,7 @@ class ObjectSearchResultsPart <
 
 				Optional <Long> currentObjectIdOptional =
 					requestContext.stuffInteger (
-						consoleHelper.objectName () + "Id");
+						consoleHelper.objectTypeCamel () + "Id");
 
 				if (
 					optionalIsPresent (

@@ -34,31 +34,31 @@
 			nullable="yes"/>
 
 		<string-field
-			name="defaultTimezone"
+			name="default-timezone"
 			nullable="yes"/>
 
 		<!-- statistics -->
 
 		<slave-field
-			type="userOnline"/>
+			type="user-online"/>
 
 	</fields>
 
 	<collections>
 
 		<children-collection
-			type="userPriv"/>
+			type="user-priv"/>
 
 		<children-collection
-			type="userSession"/>
+			type="user-session"/>
 
 		<associative-collection
 			type="group"
 			table="user_group"/>
 
 		<children-collection
-			name="processedQueueItems"
-			type="queueItem"
+			name="processed-queue-items"
+			type="queue-item"
 			join-column="processed_user_id"/>
 
 	</collections>
@@ -76,34 +76,5 @@
 			template="yes"/>
 
 	</priv-types>
-
-	<event-types>
-
-		<event-type
-			name="User grant"
-			text="%0 granted %1 to %2"
-			admin="yes"/>
-
-		<event-type
-			name="User revoke"
-			text="%0 revoked %1 from %2"
-			admin="yes"/>
-
-		<event-type
-			name="User password reset"
-			text="%0 reset password for %1"
-			admin="yes"/>
-
-		<event-type
-			name="User grant by fixture"
-			text="Fixture provider %0 granted %1 to %2"
-			admin="yes"/>
-
-		<event-type
-			name="User password set by fixture"
-			text="Fixture provider %0 set password for %1"
-			admin="yes"/>
-
-	</event-types>
 
 </record>

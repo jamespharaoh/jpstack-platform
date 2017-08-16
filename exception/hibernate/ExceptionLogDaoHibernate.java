@@ -17,7 +17,7 @@ import org.joda.time.Instant;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.exception.model.ExceptionLogDao;
@@ -26,7 +26,7 @@ import wbs.platform.exception.model.ExceptionLogSearch;
 
 public
 class ExceptionLogDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements ExceptionLogDao {
 
 	// singleton dependencies

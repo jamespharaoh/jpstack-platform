@@ -4,7 +4,7 @@
 
 	<models>
 		<model name="priv"/>
-		<model name="privType"/>
+		<model name="priv-type"/>
 	</models>
 
 	<layer name="console">

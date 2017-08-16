@@ -1,5 +1,5 @@
 <record
-	name="loggingDynamicContextInvocation"
+	name="logging-dynamic-context-invocation"
 	type="common">
 
 	<fields>
@@ -11,25 +11,25 @@
 		<!-- identity -->
 
 		<parent-field
-			name="parentContext"
-			type="loggingDynamicContext"/>
+			name="parent-context"
+			type="logging-dynamic-context"/>
 
 		<identity-reference-field
-			name="childContext"
-			type="loggingDynamicContext"/>
+			name="child-context"
+			type="logging-dynamic-context"/>
 
 		<!-- details -->
 
 		<timestamp-field
-			name="firstSeen"
+			name="first-seen"
 			column-type="postgresql"/>
 
 		<timestamp-field
-			name="lastSeen"
+			name="last-seen"
 			column-type="postgresql"/>
 
 		<integer-field
-			name="numCalls"
+			name="num-calls"
 			default="0"/>
 
 	</fields>

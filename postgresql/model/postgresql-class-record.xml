@@ -1,5 +1,5 @@
 <record
-	name="postgresqlClass"
+	name="postgresql-class"
 	type="common"
 	create="no"
 	mutable="no">

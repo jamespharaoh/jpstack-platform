@@ -8,7 +8,7 @@
 	</plugin-dependencies>
 
 	<fixtures>
-		<fixture name="platformCommon"/>
+		<fixture name="platform-common"/>
 	</fixtures>
 
 </plugin>

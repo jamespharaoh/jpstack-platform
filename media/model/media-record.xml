@@ -15,24 +15,26 @@
 		<!-- details -->
 
 		<reference-field
-			type="mediaType"/>
+			type="media-type"/>
 
 		<reference-field
 			type="content"/>
 
 		<reference-field
-			name="thumbMediaType"
-			type="mediaType"
+			name="thumb-media-type"
+			type="media-type"
 			nullable="yes"/>
 
 		<reference-field
-			name="thumb100Content"
+			name="thumb-100-content"
 			type="content"
+			column="thumb100_content_id"
 			nullable="yes"/>
 
 		<reference-field
-			name="thumb32Content"
+			name="thumb-32-content"
 			type="content"
+			column="thumb32_content_id"
 			nullable="yes"/>
 
 		<string-field

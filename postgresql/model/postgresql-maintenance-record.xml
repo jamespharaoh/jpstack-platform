@@ -1,5 +1,5 @@
 <record
-	name="postgresqlMaintenance"
+	name="postgresql-maintenance"
 	type="ephemeral">
 
 	<fields>
@@ -16,7 +16,7 @@
 
 		<enum-field
 			name="frequency"
-			type="postgresqlMaintenanceFrequency"/>
+			type="postgresql-maintenance-frequency"/>
 
 		<integer-field
 			name="sequence"/>
@@ -29,16 +29,16 @@
 		<!-- state -->
 
 		<timestamp-field
-			name="lastRun"
+			name="last-run"
 			column-type="postgresql"
 			nullable="yes"/>
 
 		<integer-field
-			name="lastDuration"
+			name="last-duration"
 			nullable="yes"/>
 
 		<string-field
-			name="lastOutput"
+			name="last-output"
 			nullable="yes"/>
 
 	</fields>

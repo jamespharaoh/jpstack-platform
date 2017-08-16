@@ -1,5 +1,5 @@
 <record
-	name="deploymentVersion"
+	name="deployment-version"
 	type="major">
 
 	<fields>
@@ -21,7 +21,7 @@
 		<!-- data -->
 
 		<reference-field
-			name="releaseNotes"
+			name="release-notes"
 			type="text"/>
 
 	</fields>

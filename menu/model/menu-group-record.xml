@@ -1,5 +1,5 @@
 <record
-	name="menuGroup"
+	name="menu-group"
 	type="major">
 
 	<fields>
@@ -38,7 +38,7 @@
 
 		<children-collection
 			name="menus"
-			type="menuItem"
+			type="menu-item"
 			order-sql="label"/>
 
 	</collections>

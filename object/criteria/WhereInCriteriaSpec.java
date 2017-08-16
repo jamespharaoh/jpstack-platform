@@ -14,12 +14,15 @@ import wbs.console.module.ConsoleSpec;
 import wbs.console.priv.UserPrivChecker;
 import wbs.console.request.ConsoleRequestContext;
 
+import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataClass;
+import wbs.framework.database.NestedTransaction;
+import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
-import wbs.framework.logging.TaskLogger;
+import wbs.framework.logging.LogContext;
 
 import wbs.utils.etc.PropertyUtils;
 
@@ -27,10 +30,15 @@ import wbs.utils.etc.PropertyUtils;
 @DataClass ("where-in")
 @PrototypeComponent ("whereInCriteriaSpec")
 public
-class WhereInCriteriaSpec
+class WhereInCriteriaSpec <RecordType extends Record <RecordType>>
 	implements
 		ConsoleSpec,
-		CriteriaSpec {
+		CriteriaSpec <RecordType> {
+
+	// singleton dependencies
+
+	@ClassSingletonDependency
+	LogContext logContext;
 
 	// attributes
 
@@ -52,24 +60,35 @@ class WhereInCriteriaSpec
 	@Override
 	public
 	boolean evaluate (
-			@NonNull TaskLogger parentTaskLogger,
+			@NonNull Transaction parentTransaction,
 			@NonNull ConsoleRequestContext requestContext,
 			@NonNull UserPrivChecker privChecker,
-			@NonNull ConsoleHelper <?> objectHelper,
-			@NonNull Record <?> object) {
+			@NonNull ConsoleHelper <RecordType> objectHelper,
+			@NonNull RecordType object) {
 
-		Object fieldValue =
-			PropertyUtils.propertyGetAuto (
-				object,
-				fieldName);
+		try (
 
-		if (fieldValue == null) {
-			return false;
+			NestedTransaction transaction =
+				parentTransaction.nestTransaction (
+					logContext,
+					"evaluate");
+
+		) {
+
+			Object fieldValue =
+				PropertyUtils.propertyGetAuto (
+					object,
+					fieldName);
+
+			if (fieldValue == null) {
+				return false;
+			}
+
+			return stringInSafe (
+				fieldValue.toString (),
+				values);
+
 		}
-
-		return stringInSafe (
-			fieldValue.toString (),
-			values);
 
 	}
 

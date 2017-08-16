@@ -409,7 +409,7 @@ class ObjectSearchPageBuilder <
 							.getPackage ()
 							.getName (),
 						capitalise (
-							consoleHelper.objectName ())));
+							consoleHelper.objectTypeCamel ())));
 
 			Optional <Class <?>> searchClassOptional =
 				classForName (

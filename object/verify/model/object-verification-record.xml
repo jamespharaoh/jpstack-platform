@@ -1,0 +1,58 @@
+<record
+	name="object-verification"
+	type="minor">
+
+	<fields>
+
+		<!-- id -->
+
+		<generated-id-field/>
+
+		<!-- identity -->
+
+		<parent-type-field/>
+		<parent-id-field/>
+
+		<!-- data -->
+
+		<timestamp-field
+			name="last-run"
+			column-type="postgresql"
+			nullable="yes"/>
+
+		<timestamp-field
+			name="next-run"
+			column-type="postgresql"/>
+
+		<timestamp-field
+			name="last-failure"
+			column-type="postgresql"
+			nullable="yes"/>
+
+		<timestamp-field
+			name="last-success"
+			column-type="postgresql"
+			nullable="yes"/>
+
+		<yes-no-field
+			name="valid"
+			nullable="yes"/>
+
+		<reference-field
+			name="queue-item"
+			type="queue-item"
+			nullable="yes"/>
+
+	</fields>
+
+	<background-processes>
+
+		<background-process
+			object-type="object-verification"
+			name="Update"
+			description="Update object verification"
+			frequency="5 seconds"/>
+
+	</background-processes>
+
+</record>

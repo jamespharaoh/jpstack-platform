@@ -43,7 +43,7 @@
 				<object-search-page
 					name="queueItem"
 					tab-label="Queue items"
-					object-type="queueItem"
+					object-type="queue-item"
 					search-class="wbs.platform.queue.model.QueueItemSearch"
 					search-form="queue-item-report-search"
 					results-form="queue-item-report-results"/>
@@ -51,7 +51,7 @@
 				<object-search-page
 					name="user"
 					tab-label="Users"
-					object-type="queueItem"
+					object-type="queue-item"
 					search-class="wbs.platform.queue.model.QueueItemSearch"
 					search-form="user-queue-search"
 					search-dao-method="searchUserQueueReportIds"

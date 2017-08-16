@@ -1,5 +1,5 @@
 <record
-	name="queueType"
+	name="queue-type"
 	type="type">
 
 	<fields>
@@ -11,8 +11,8 @@
 		<!-- identity -->
 
 		<parent-field
-			name="parentType"
-			type="objectType"
+			name="parent-type"
+			type="object-type"
 			column="parent_object_type_id"/>
 
 		<code-field/>
@@ -24,19 +24,19 @@
 		<!-- data -->
 
 		<reference-field
-			name="subjectType"
-			type="objectType"
+			name="subject-type"
+			type="object-type"
 			column="subject_object_type_id"/>
 
 		<reference-field
-			name="refType"
-			type="objectType"
+			name="ref-type"
+			type="object-type"
 			column="ref_object_type_id"/>
 
 		<!-- settings -->
 
 		<integer-field
-			name="defaultPriority"
+			name="default-priority"
 			nullable="yes"/>
 
 	</fields>

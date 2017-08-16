@@ -1,0 +1,28 @@
+<event-types>
+
+	<event-type
+		name="User grant"
+		text="%0 granted %1 to %2"
+		admin="yes"/>
+
+	<event-type
+		name="User revoke"
+		text="%0 revoked %1 from %2"
+		admin="yes"/>
+
+	<event-type
+		name="User password reset"
+		text="%0 reset password for %1"
+		admin="yes"/>
+
+	<event-type
+		name="User grant by fixture"
+		text="Fixture provider %0 granted %1 to %2"
+		admin="yes"/>
+
+	<event-type
+		name="User password set by fixture"
+		text="Fixture provider %0 set password for %1"
+		admin="yes"/>
+
+</event-types>

@@ -3,7 +3,7 @@
 	package="wbs.platform.updatelog">
 
 	<models>
-		<model name="updateLog"/>
+		<model name="update-log"/>
 	</models>
 
 	<layer name="logic">

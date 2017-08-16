@@ -616,9 +616,9 @@ class RawMediaLogicImplementation
 			toJavaIntegerRequired (
 				offsetVertical),
 			toJavaIntegerRequired (
-				offsetHorizontal + targetWidth),
+				offsetHorizontal + scaleWidth),
 			toJavaIntegerRequired (
-				offsetVertical + targetHeight),
+				offsetVertical + scaleHeight),
 			0,
 			0,
 			sourceImage.getWidth (),

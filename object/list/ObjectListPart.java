@@ -15,11 +15,18 @@ import static wbs.utils.string.StringUtils.capitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.web.utils.HtmlAttributeUtils.htmlClassAttribute;
 import static wbs.web.utils.HtmlAttributeUtils.htmlDataAttribute;
+import static wbs.web.utils.HtmlAttributeUtils.htmlNameAttributeFormat;
+import static wbs.web.utils.HtmlAttributeUtils.htmlValueAttribute;
 import static wbs.web.utils.HtmlBlockUtils.htmlParagraphClose;
 import static wbs.web.utils.HtmlBlockUtils.htmlParagraphOpen;
 import static wbs.web.utils.HtmlFormUtils.htmlFormClose;
 import static wbs.web.utils.HtmlFormUtils.htmlFormOpenGetAction;
+import static wbs.web.utils.HtmlFormUtils.htmlFormOpenPostAction;
+import static wbs.web.utils.HtmlInputUtils.htmlInputSubmitWrite;
+import static wbs.web.utils.HtmlTableUtils.htmlTableCellClose;
+import static wbs.web.utils.HtmlTableUtils.htmlTableCellOpen;
 import static wbs.web.utils.HtmlTableUtils.htmlTableClose;
+import static wbs.web.utils.HtmlTableUtils.htmlTableHeaderCellWrite;
 import static wbs.web.utils.HtmlTableUtils.htmlTableOpenList;
 import static wbs.web.utils.HtmlTableUtils.htmlTableRowClose;
 import static wbs.web.utils.HtmlTableUtils.htmlTableRowOpen;
@@ -117,13 +124,22 @@ class ObjectListPart <
 	Map <String, ObjectListBrowserSpec> listBrowserSpecs;
 
 	@Getter @Setter
-	Map <String, ObjectListTabSpec> listTabSpecs;
+	Map <String, ObjectListTabSpec <ObjectType>> listTabSpecs;
 
 	@Getter @Setter
 	ConsoleFormType <ObjectType> formType;
 
 	@Getter @Setter
 	String targetContextTypeName;
+
+	@Getter @Setter
+	Boolean editControl;
+
+	@Getter @Setter
+	Boolean moveControls;
+
+	@Getter @Setter
+	Boolean deleteControl;
 
 	// state
 
@@ -133,7 +149,7 @@ class ObjectListPart <
 
 	Optional <ObjectListBrowserSpec> currentListBrowserSpec;
 
-	ObjectListTabSpec currentListTabSpec;
+	ObjectListTabSpec <ObjectType> currentListTabSpec;
 	ObjectType currentObject;
 
 	List <ObjectType> allObjects;
@@ -229,20 +245,6 @@ class ObjectListPart <
 
 	}
 
-	/*
-	void prepareFieldSet (
-			@NonNull TaskLogger parentTaskLogger) {
-
-		fields =
-			parent != null
-				? formFieldsProvider.getFieldsForParent (
-					parentTaskLogger,
-					parent)
-				: formFieldsProvider.getStaticFields ();
-
-	}
-	*/
-
 	void prepareBrowserSpec (
 			@NonNull Transaction parentTransaction) {
 
@@ -331,7 +333,7 @@ class ObjectListPart <
 			Long objectId =
 				(Long)
 				requestContext.stuff (
-					consoleHelper.objectName () + "Id");
+					consoleHelper.objectTypeCamel () + "Id");
 
 			if (
 				isNotNull (
@@ -526,7 +528,7 @@ class ObjectListPart <
 						() -> new NullPointerException (
 							stringFormat (
 								"Can't find grand parent object %s with id %s",
-								grandParentHelper.objectName (),
+								grandParentHelper.objectTypeHyphen (),
 								integerToDecimalString (
 									grandParentId))));
 
@@ -553,7 +555,7 @@ class ObjectListPart <
 							"DAO method not found: %s.%s (%s, Interval)",
 							stringFormat (
 								"%sHelper",
-								consoleHelper.objectName ()),
+								consoleHelper.objectTypeCamel ()),
 							daoMethodName,
 							grandParentHelper.objectClass ().getSimpleName ()));
 
@@ -682,7 +684,7 @@ class ObjectListPart <
 				}
 
 				for (
-					CriteriaSpec criteriaSpec
+					CriteriaSpec <ObjectType> criteriaSpec
 						: currentListTabSpec.criterias ()
 				) {
 
@@ -793,8 +795,11 @@ class ObjectListPart <
 				currentListBrowserSpec.get ();
 
 			String localUrl =
-				requestContext.resolveLocalUrl (
-					"/" + localName);
+				requestContext.resolveLocalUrlFormat (
+					"/%s",
+					localName,
+					"?tab=%u",
+					currentListTabSpec.name ());
 
 			htmlFormOpenGetAction (
 				formatWriter,
@@ -869,7 +874,7 @@ class ObjectListPart <
 					"links"));
 
 			for (
-				ObjectListTabSpec listTabSpec
+				ObjectListTabSpec <ObjectType> listTabSpec
 					: listTabSpecs.values ()
 			) {
 
@@ -910,6 +915,22 @@ class ObjectListPart <
 
 		) {
 
+			if (
+				moveControls
+				|| editControl
+				|| deleteControl
+			) {
+
+				htmlFormOpenPostAction (
+					formatWriter,
+					requestContext.resolveLocalUrlFormat (
+						"/%s",
+						localName,
+						"?tab=%u",
+						currentListTabSpec.name ()));
+
+			}
+
 			htmlTableOpenList (
 				formatWriter);
 
@@ -919,6 +940,18 @@ class ObjectListPart <
 			form.outputTableHeadings (
 				transaction,
 				formatWriter);
+
+			if (
+				moveControls
+				|| editControl
+				|| deleteControl
+			) {
+
+				htmlTableHeaderCellWrite (
+					formatWriter,
+					"");
+
+			}
 
 			htmlTableRowClose (
 				formatWriter);
@@ -964,6 +997,90 @@ class ObjectListPart <
 					object,
 					false);
 
+				if (
+					moveControls
+					|| editControl
+					|| deleteControl
+				) {
+
+					htmlTableCellOpen (
+						formatWriter,
+						htmlClassAttribute (
+							"mini-controls"));
+
+					if (moveControls) {
+
+						htmlInputSubmitWrite (
+							formatWriter,
+							htmlNameAttributeFormat (
+								"move-up-%s",
+								integerToDecimalString (
+									object.getId ())),
+							htmlValueAttribute (
+								"\u2191"));
+
+						htmlInputSubmitWrite (
+							formatWriter,
+							htmlNameAttributeFormat (
+								"move-down-%s",
+								integerToDecimalString (
+									object.getId ())),
+							htmlValueAttribute (
+								"\u2193"));
+
+					}
+
+					if (editControl) {
+
+						htmlInputSubmitWrite (
+							formatWriter,
+							htmlNameAttributeFormat (
+								"edit-%s",
+								integerToDecimalString (
+									object.getId ())),
+							htmlValueAttribute (
+								"\ud83d\udd27"));
+
+					}
+
+					if (deleteControl) {
+
+						if (
+							consoleHelper.getDeleted (
+								transaction,
+								object,
+								false)
+						) {
+
+							htmlInputSubmitWrite (
+								formatWriter,
+								htmlNameAttributeFormat (
+									"undelete-%s",
+									integerToDecimalString (
+										object.getId ())),
+								htmlValueAttribute (
+									"\ud83d\uddd8"));
+
+						} else {
+
+							htmlInputSubmitWrite (
+								formatWriter,
+								htmlNameAttributeFormat (
+									"delete-%s",
+									integerToDecimalString (
+										object.getId ())),
+								htmlValueAttribute (
+									"\ud83d\uddd9"));
+
+						}
+
+					}
+
+					htmlTableCellClose (
+						formatWriter);
+
+				}
+
 				htmlTableRowClose (
 					formatWriter);
 
@@ -971,6 +1088,17 @@ class ObjectListPart <
 
 			htmlTableClose (
 				formatWriter);
+
+			if (
+				moveControls
+				|| editControl
+				|| deleteControl
+			) {
+
+				htmlFormClose (
+					formatWriter);
+
+			}
 
 		}
 

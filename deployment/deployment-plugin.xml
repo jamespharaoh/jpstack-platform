@@ -7,11 +7,14 @@
 	</plugin-dependencies>
 
 	<models>
-		<model name="apiDeployment"/>
-		<model name="consoleDeployment"/>
-		<model name="daemonDeployment"/>
-		<model name="deploymentVersion"/>
-		<enum-type name="deploymentState"/>
+
+		<enum-type name="deployment-state"/>
+
+		<model name="api-deployment"/>
+		<model name="console-deployment"/>
+		<model name="daemon-deployment"/>
+		<model name="deployment-version"/>
+
 	</models>
 
 	<fixtures>
@@ -26,8 +29,8 @@
 
 	<layer name="console">
 		<component class="console.ApiDeploymentRestartFormActionHelper"/>
-		<component class="console.DaemonDeploymentRestartFormActionHelper"/>
 		<component class="console.ConsoleDeploymentRestartFormActionHelper"/>
+		<component class="console.DaemonDeploymentRestartFormActionHelper"/>
 	</layer>
 
 	<layer name="logic">

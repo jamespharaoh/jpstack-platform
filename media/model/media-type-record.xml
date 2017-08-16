@@ -1,5 +1,5 @@
 <record
-	name="mediaType"
+	name="media-type"
 	type="major">
 
 	<fields>
@@ -11,7 +11,7 @@
 		<!-- identity -->
 
 		<code-field
-			name="mimeType"/>
+			name="mime-type"/>
 
 		<!-- details -->
 

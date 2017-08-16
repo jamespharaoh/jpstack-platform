@@ -1,0 +1,18 @@
+<event-types>
+
+	<event-type
+		name="API deployment restarted"
+		text="%0 restarted %1"
+		admin="no"/>
+
+	<event-type
+		name="Console deployment restarted"
+		text="%0 restarted %1"
+		admin="no"/>
+
+	<event-type
+		name="Daemon deployment restarted"
+		text="%0 restarted %1"
+		admin="no"/>
+
+</event-types>

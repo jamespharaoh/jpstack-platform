@@ -20,7 +20,7 @@ import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.OwnedTransaction;
 import wbs.framework.database.Transaction;
 import wbs.framework.entity.record.Record;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.TaskLogger;
 import wbs.framework.object.ObjectTypeRegistry;
@@ -32,7 +32,7 @@ import wbs.platform.scaffold.model.RootRec;
 @SingletonComponent ("objectTypeDao")
 public
 class ObjectTypeDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements
 		ObjectTypeDao,
 		ObjectTypeRegistry {

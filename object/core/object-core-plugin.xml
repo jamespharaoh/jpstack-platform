@@ -11,11 +11,11 @@
 	</sql-scripts>
 
 	<models>
-		<model name="objectType"/>
+		<model name="object-type"/>
 	</models>
 
 	<fixtures>
-		<fixture name="objectType"/>
+		<fixture name="object-type"/>
 	</fixtures>
 
 	<console-modules>

@@ -199,6 +199,12 @@ class ObjectListPageBuilder <
 							"%sListResponder",
 							container.newBeanNamePrefix ()))
 
+					.postActionName (
+						taskLogger,
+						stringFormat (
+							"%sListAction",
+							container.newBeanNamePrefix ()))
+
 				),
 				extensionPoint.contextTypeNames ());
 
@@ -225,43 +231,6 @@ class ObjectListPageBuilder <
 
 			typeCode =
 				spec.typeCode ();
-
-			/*
-			// if a provider name is provided
-
-			if (spec.fieldsProviderName () != null) {
-
-				fieldsProvider =
-					genericCastUnchecked (
-						componentManager.getComponentRequired (
-							taskLogger,
-							spec.fieldsProviderName (),
-							FieldsProvider.class));
-
-			// if a field name is provided
-
-			} else if (spec.fieldsName () != null) {
-
-				fieldsProvider =
-					new StaticFieldsProvider <ObjectType, ParentType> ()
-
-					.fields (
-						consoleModule.formFieldSetRequired (
-							spec.fieldsName (),
-							consoleHelper.objectClass ()));
-
-			// if nothing is provided
-
-			} else {
-
-				fieldsProvider =
-					new StaticFieldsProvider<ObjectType,ParentType> ()
-
-					.fields (
-						defaultFields (
-							taskLogger));
-
-			}*/
 
 		}
 

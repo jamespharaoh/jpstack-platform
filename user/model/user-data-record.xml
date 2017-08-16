@@ -1,5 +1,5 @@
 <record
-	name="userData"
+	name="user-data"
 	type="ephemeral">
 
 	<fields>
@@ -18,11 +18,11 @@
 		<!-- details -->
 
 		<timestamp-field
-			name="createdTime"
+			name="created-time"
 			column-type="postgresql"/>
 
 		<timestamp-field
-			name="expiryTime"
+			name="expiry-time"
 			column-type="postgresql"/>
 
 		<!-- state -->

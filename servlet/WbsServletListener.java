@@ -111,26 +111,38 @@ class WbsServletListener
 
 		) {
 
-			bootstrapComponentManager.registerStandardClasses (
-				taskLogger);
+			try {
 
-			bootstrapComponentManager.bootstrapComponent (
-				taskLogger,
-				this);
+				bootstrapComponentManager.registerStandardClasses (
+					taskLogger);
 
-			bootstrapComponentManager.registerPluginBootstrapComponents (
-				taskLogger,
-				stringSplitComma (
-					event.getServletContext ().getInitParameter (
-						"layerNames")));
+				bootstrapComponentManager.bootstrapComponent (
+					taskLogger,
+					this);
 
-			registerWebComponents (
-				taskLogger,
-				bootstrapComponentManager);
+				bootstrapComponentManager.registerPluginBootstrapComponents (
+					taskLogger,
+					stringSplitComma (
+						event.getServletContext ().getInitParameter (
+							"layerNames")));
 
-			contextInitializedReal (
-				taskLogger,
-				event);
+				registerWebComponents (
+					taskLogger,
+					bootstrapComponentManager);
+
+				contextInitializedReal (
+					taskLogger,
+					event);
+
+			} catch (Throwable exception) {
+
+				taskLogger.errorFormatException (
+					exception,
+					"Failed to initialise component manager, shutting down");
+
+				shutdown ();
+
+			}
 
 		}
 
@@ -550,10 +562,9 @@ class WbsServletListener
 
 		Instant restartTime =
 			Instant.now ().plus (
-				restartFrequency.getMillis ()
-				- restartFrequencyDeviation.getMillis ()
-				+ randomLogic.randomInteger (
-					restartFrequencyDeviation.getMillis () * 2));
+				randomLogic.randomDuration (
+				restartFrequency,
+				restartFrequencyDeviation));
 
 		while (
 			earlierThan (
@@ -635,11 +646,11 @@ class WbsServletListener
 	public final static
 	Duration restartFrequency =
 		Duration.standardHours (
-			1l);
+			4l);
 
 	public final static
 	Duration restartFrequencyDeviation =
 		Duration.standardMinutes (
-			15l);
+			30l);
 
 }

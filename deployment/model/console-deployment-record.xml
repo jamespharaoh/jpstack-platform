@@ -1,5 +1,5 @@
 <record
-	name="consoleDeployment"
+	name="console-deployment"
 	type="major">
 
 	<fields>
@@ -27,22 +27,22 @@
 			nullable="yes"/>
 
 		<string-field
-			name="serviceName"
+			name="service-name"
 			nullable="yes"/>
 
 		<string-field
-			name="statusLabel"
+			name="status-label"
 			nullable="yes"/>
 
 		<!-- state -->
 
 		<enum-field
 			name="state"
-			type="deploymentState"
+			type="deployment-state"
 			nullable="yes"/>
 
 		<timestamp-field
-			name="stateTimestamp"
+			name="state-timestamp"
 			column-type="postgresql"
 			nullable="yes"/>
 
@@ -51,15 +51,6 @@
 			default="no"/>
 
 	</fields>
-
-	<event-types>
-
-		<event-type
-			name="Console deployment restarted"
-			text="%0 restarted %1"
-			admin="no"/>
-
-	</event-types>
 
 	<priv-types>
 

@@ -372,7 +372,7 @@ class ObjectCreateAction <
 					userConsoleLogic.userRequired (
 						transaction),
 					objectRef,
-					consoleHelper.shortName (),
+					consoleHelper.shortNameSingular (),
 					parent);
 
 			} else {
@@ -405,7 +405,7 @@ class ObjectCreateAction <
 					optionalOf (
 						objectRef),
 					optionalOf (
-						consoleHelper.shortName ()));
+						consoleHelper.shortNameSingular ()));
 
 			}
 
@@ -431,7 +431,7 @@ class ObjectCreateAction <
 				stringFormat (
 					"%s created",
 					capitalise (
-						consoleHelper.shortName ())));
+						consoleHelper.shortNameSingular ())));
 
 			requestContext.setEmptyFormData ();
 

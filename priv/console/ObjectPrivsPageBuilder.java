@@ -164,7 +164,7 @@ class ObjectPrivsPageBuilder <
 						ImmutableList.of (
 							stringFormat (
 								"%s.manage",
-								consoleHelper.objectName ()))),
+								consoleHelper.objectTypeCamel ()))),
 
 				extensionPoint.contextTypeNames ());
 
@@ -198,7 +198,7 @@ class ObjectPrivsPageBuilder <
 						ImmutableList.of (
 							stringFormat (
 								"%s.manage",
-								consoleHelper.objectName ()))),
+								consoleHelper.objectTypeCamel ()))),
 
 				extensionPoint.contextTypeNames ()
 			);
@@ -232,7 +232,7 @@ class ObjectPrivsPageBuilder <
 				capitalise (
 					stringFormat (
 						"%s privs",
-						consoleHelper.friendlyName ())))
+						consoleHelper.friendlyNameSingular ())))
 
 			.pagePartFactory (
 				privsPartFactory)

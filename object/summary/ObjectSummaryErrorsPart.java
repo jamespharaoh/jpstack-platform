@@ -97,7 +97,8 @@ class ObjectSummaryErrorsPart <
 				consoleHelper.hooks ().verifyData (
 					transaction,
 					object,
-					true);
+					true,
+					false);
 
 		}
 
@@ -174,7 +175,7 @@ class ObjectSummaryErrorsPart <
 				htmlTableCellWrite (
 					formatWriter,
 					capitalise (
-						errorObjectHelper.friendlyName ()));
+						errorObjectHelper.friendlyNameSingular ()));
 
 				if (
 					referenceEqualWithClass (
@@ -194,7 +195,7 @@ class ObjectSummaryErrorsPart <
 						formatWriter,
 						privChecker,
 						errorObject,
-						object);
+						errorObject);
 
 				}
 

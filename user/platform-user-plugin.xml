@@ -8,16 +8,18 @@
 
 	<models>
 		<model name="user"/>
-		<model name="userData"/>
-		<model name="userOnline"/>
-		<model name="userPriv"/>
-		<model name="userSession"/>
+		<model name="user-data"/>
+		<model name="user-online"/>
+		<model name="user-priv"/>
+		<model name="user-session"/>
 	</models>
 
 	<layer name="console">
 
 		<bootstrap-component class="console.SupervisorUserStatsGrouperSpec"/>
 
+		<component class="console.SupervisorHelperImplementation"/>
+		<component class="console.SupervisorUserStatsGrouperBuilder"/>
 		<component class="console.UserConsoleLogicImplementation"/>
 		<component class="console.UserPasswordAction"/>
 		<component class="console.UserPasswordPart"/>
@@ -26,8 +28,6 @@
 		<component class="console.UserPrivsSummaryPart"/>
 		<component class="console.UserSessionLogicImplementation"/>
 		<component class="console.UserStatsGrouper"/>
-		<component class="console.SupervisorHelperImplementation"/>
-		<component class="console.SupervisorUserStatsGrouperBuilder"/>
 
 	</layer>
 

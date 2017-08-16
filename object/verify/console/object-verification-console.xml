@@ -1,0 +1,27 @@
+<console-module
+	name="object-verification">
+
+	<console-helper-provider
+		object-name="objectVerification"
+		view-priv="parent:">
+
+		<context-stuff
+			name="objectVerificationName"
+			field="id"/>
+
+	</console-helper-provider>
+
+	<object-context
+		name="objectVerification"
+		object-name="objectVerification">
+
+		<object>
+
+			<context-action-page
+				name="pendingForm"/>
+
+		</object>
+
+	</object-context>
+
+</console-module>

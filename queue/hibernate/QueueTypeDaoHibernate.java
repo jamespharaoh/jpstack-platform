@@ -7,7 +7,7 @@ import lombok.NonNull;
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.database.NestedTransaction;
 import wbs.framework.database.Transaction;
-import wbs.framework.hibernate.HibernateDao;
+import wbs.framework.hibernate.HibernateDaoLegacy;
 import wbs.framework.logging.LogContext;
 
 import wbs.platform.queue.model.QueueTypeDao;
@@ -15,7 +15,7 @@ import wbs.platform.queue.model.QueueTypeRec;
 
 public
 class QueueTypeDaoHibernate
-	extends HibernateDao
+	extends HibernateDaoLegacy
 	implements QueueTypeDao {
 
 	// singleton dependencies

@@ -14,7 +14,7 @@
 	<models>
 		<model name="content"/>
 		<model name="media"/>
-		<model name="mediaType"/>
+		<model name="media-type"/>
 	</models>
 
 	<layer name="console">
@@ -46,7 +46,7 @@
 
 	<fixtures>
 		<fixture name="media"/>
-		<fixture name="mediaTestImages"/>
+		<fixture name="media-test-images"/>
 	</fixtures>
 
 	<console-modules>

@@ -347,7 +347,7 @@ class ObjectBrowsePageBuilder <
 			String fieldSetName =
 				stringFormat (
 					"%s.browse",
-					consoleHelper.objectName ());
+					consoleHelper.objectTypeCamel ());
 
 			return consoleFormBuilder.buildFormFieldSet (
 				taskLogger,
