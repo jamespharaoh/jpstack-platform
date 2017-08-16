@@ -195,7 +195,7 @@ class ObjectSummaryErrorsPart <
 						formatWriter,
 						privChecker,
 						errorObject,
-						object);
+						errorObject);
 
 				}
 
