@@ -2,7 +2,7 @@ package wbs.platform.service.fixture;
 
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.string.CodeUtils.simplifyToCodeRequired;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -83,7 +83,7 @@ class ServiceTypeBuilder
 
 			transaction.noticeFormat (
 				"Create service type %s.%s",
-				camelToUnderscore (
+				hyphenToUnderscore (
 					ifNull (
 						spec.subject (),
 						parent.name ())),
@@ -98,7 +98,7 @@ class ServiceTypeBuilder
 			throw new RuntimeException (
 				stringFormat (
 					"Error creating service type %s.%s",
-					camelToUnderscore (
+					hyphenToUnderscore (
 						ifNull (
 							spec.subject (),
 							parent.name ())),
@@ -126,7 +126,7 @@ class ServiceTypeBuilder
 			// lookup parent type
 
 			String parentTypeCode =
-				camelToUnderscore (
+				hyphenToUnderscore (
 					ifNull (
 						spec.subject (),
 						parent.name ()));

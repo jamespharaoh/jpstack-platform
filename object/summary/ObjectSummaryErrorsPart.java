@@ -1,6 +1,7 @@
 package wbs.platform.object.summary;
 
 import static wbs.utils.collection.CollectionUtils.collectionIsEmpty;
+import static wbs.utils.etc.DebugUtils.debugFormat;
 import static wbs.utils.etc.LogicUtils.referenceEqualWithClass;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.capitalise;
@@ -92,6 +93,8 @@ class ObjectSummaryErrorsPart <
 				consoleHelper.lookupObject (
 					transaction,
 					requestContext.consoleContextStuffRequired ());
+
+debugFormat ("CALL VERIFY");
 
 			errors =
 				consoleHelper.hooks ().verifyData (
