@@ -1,6 +1,5 @@
 package wbs.platform.object.list;
 
-import static wbs.utils.etc.DebugUtils.debugFormat;
 import static wbs.utils.etc.NumberUtils.equalToZero;
 import static wbs.utils.etc.NumberUtils.parseIntegerRequired;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
@@ -111,8 +110,6 @@ class ObjectListAction <Type extends Record <Type>>
 
 				String parameterName =
 					parameterEntry.getKey ();
-
-debugFormat ("PARAM: %s", parameterName);
 
 				Optional <String> moveUpIdStringOptional =
 					stringExtract (

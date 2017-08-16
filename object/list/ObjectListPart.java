@@ -2,7 +2,6 @@ package wbs.platform.object.list;
 
 import static wbs.utils.collection.CollectionUtils.collectionStream;
 import static wbs.utils.collection.MapUtils.emptyMap;
-import static wbs.utils.etc.DebugUtils.debugFormat;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.NullUtils.isNotNull;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
@@ -13,7 +12,6 @@ import static wbs.utils.etc.OptionalUtils.presentInstances;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.camelToSpaces;
 import static wbs.utils.string.StringUtils.capitalise;
-import static wbs.utils.string.StringUtils.objectToString;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.web.utils.HtmlAttributeUtils.htmlClassAttribute;
 import static wbs.web.utils.HtmlAttributeUtils.htmlDataAttribute;
@@ -681,8 +679,6 @@ class ObjectListPart <
 						object)
 				) {
 
-debugFormat ("Can't view: %s", objectToString (object));
-
 					continue;
 
 				}
@@ -701,15 +697,11 @@ debugFormat ("Can't view: %s", objectToString (object));
 							object)
 					) {
 
-debugFormat ("Doesn't match: %s", objectToString (object));
-
 						continue OUTER;
 
 					}
 
 				}
-
-debugFormat ("Selected: %s", objectToString (object));
 
 				selectedObjects.add (
 					object);
