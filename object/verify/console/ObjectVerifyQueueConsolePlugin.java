@@ -93,6 +93,8 @@ class ObjectVerifyQueueConsolePlugin
 			ImmutableSet.Builder <String> builder =
 				ImmutableSet.builder ();
 
+builder.add ("shn_database.data_verification");
+
 			for (
 				RecordSpec recordSpec
 					: modelMetaLoader.recordSpecs ().values ()
