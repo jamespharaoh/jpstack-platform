@@ -91,7 +91,7 @@ class ObjectListPageBuilder <
 
 	Map <String, ObjectListBrowserSpec> listBrowsersByFieldName;
 
-	Map <String, ObjectListTabSpec> listTabsByName;
+	Map <String, ObjectListTabSpec <ObjectType>> listTabsByName;
 
 	// build
 

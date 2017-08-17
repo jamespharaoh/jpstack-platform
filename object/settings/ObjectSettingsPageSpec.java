@@ -11,6 +11,8 @@ import wbs.framework.data.annotations.DataAncestor;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("object-settings-page")
@@ -26,24 +28,29 @@ class ObjectSettingsPageSpec
 
 	// attributes
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String objectName;
 
 	@DataAttribute (
 		name = "form",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String formTypeName;
 
 	@DataAttribute
 	String privKey;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String name;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String shortName;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String longName;
 
 	@DataAttribute
@@ -52,19 +59,24 @@ class ObjectSettingsPageSpec
 	@DataAttribute
 	String friendlyShortName;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String responderName;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String fileName;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String tabName;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String tabLocation;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String listContextTypeName;
 
 }
