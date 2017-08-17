@@ -3,6 +3,7 @@ package wbs.platform.object.settings;
 import static wbs.utils.etc.LogicUtils.ifNotNullThenElse;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
+import static wbs.utils.string.StringUtils.camelToHyphen;
 import static wbs.utils.string.StringUtils.camelToSpaces;
 import static wbs.utils.string.StringUtils.capitalise;
 import static wbs.utils.string.StringUtils.hyphenToCamel;
@@ -395,7 +396,8 @@ class ObjectSettingsPageBuilder <
 					ifNotNullThenElse (
 						spec.objectName (),
 						() -> objectManager.consoleHelperForNameRequired (
-							spec.objectName ()),
+							camelToHyphen (
+								spec.objectName ())),
 						() -> container.consoleHelper ()));
 
 			name =

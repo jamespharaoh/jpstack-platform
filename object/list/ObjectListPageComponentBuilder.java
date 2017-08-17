@@ -235,8 +235,7 @@ class ObjectListPageComponentBuilder
 					"responderProvider",
 					"prototype",
 					"%sListResponder",
-					hyphenToCamel (
-						context.objectType ()))
+					context.newComponentNamePrefix ())
 
 			);
 
